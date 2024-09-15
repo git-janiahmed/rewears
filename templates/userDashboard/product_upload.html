@@ -1,0 +1,361 @@
+{% load static %}
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <h1 class="text-3xl font-bold underline">
+        Product images
+    </h1>
+    <!-- Card Section -->
+    <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Card -->
+            <div class="bg-white rounded-xl shadow">
+
+
+                <div class=" p-4 sm:p-7">
+                    <!-- Grid -->
+                    <div class="space-y-4 sm:space-y-6">
+
+                        <div class="space-y-2">
+                            <label for="images" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Product images
+                            </label>
+
+                            <label for="images"
+                                class="group p-4 sm:p-7 block cursor-pointer text-center border-2 border-dashed border-gray-200 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2">
+                                <input required id="images" name="images" type="file" class="sr-only" multiple>
+                                <svg class="size-10 mx-auto text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16"
+                                    height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z" />
+                                    <path
+                                        d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                                </svg>
+                                <span class="mt-2 block text-sm text-gray-800">
+                                    Browse your device or <span
+                                        class="group-hover:text-primary-700 text-primary-600">drag 'n
+                                        drop'</span>
+                                </span>
+                                <span class="mt-1 block text-xs text-gray-500">
+                                    Maximum file size is 2 MB
+                                </span>
+                            </label>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="af-submit-app-title"
+                                class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Title
+                            </label>
+                            <input required name="title" id="af-submit-app-title" name="title" type="text"
+                                class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                                placeholder="Enter Title">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="af-submit-app-description"
+                                class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Description
+                            </label>
+
+                            <textarea name="description" id="af-submit-app-description"
+                                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg border-gray-200 rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                                rows="6"
+                                placeholder="A detailed summary will better explain your products to the audiences. Our users will see this in your dedicated product page."></textarea>
+                        </div>
+
+
+                        <div class="space-y-2">
+                            <label for="main_category" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Main Category:
+                            </label>
+
+                            <select required name="main_category" id="main_category"
+                                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                                <option selected>Select a category</option>
+                                {% for category in main_categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="sub_category" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Sub Category:
+                            </label>
+
+                            <select required id="sub_category" name="sub_category"
+                                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                                <option value="">Select Sub Category</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="sub_sub_category" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Sub Category:
+                            </label>
+
+                            <select required id="sub_sub_category" name="sub_sub_category"
+                                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                                <option value="">Select Sub Category</option>
+                            </select>
+                        </div>
+
+
+                        <div class="space-y-2">
+                            <label for="brand" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Brand
+                            </label>
+
+                            <select required id="brand" name="brand"
+                                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                                <option value="">Select Brand</option>
+                            </select>
+                        </div>
+
+
+                        <div class="space-y-2">
+                            <label for="size" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Size
+                            </label>
+
+                            <select required id="size" name="size"
+                                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                                <option value="">Select Size</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="Color" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Color
+                            </label>
+
+                            <fieldset class="flex flex-wrap gap-4 pt-4">
+
+                                <label for="id_colors_0"
+                                    class="block size-8 cursor-pointer rounded-full bg-red-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-red-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="1" id="id_colors_0" class="sr-only" />
+                                    <span class="sr-only">red</span>
+                                </label>
+
+                                <label for="id_colors_1"
+                                    class="block size-8 cursor-pointer rounded-full bg-red-600 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-red-600 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="2" id="id_colors_1" class="sr-only" />
+                                    <span class="sr-only">Red</span>
+                                </label>
+
+                                <label for="id_colors_2"
+                                    class="block size-8 cursor-pointer rounded-full bg-blue-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-blue-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="3" id="id_colors_2" class="sr-only" />
+                                    <span class="sr-only">Blue</span>
+                                </label>
+
+                                <label for="id_colors_3"
+                                    class="block size-8 cursor-pointer rounded-full bg-green-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-green-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="4" id="id_colors_3" class="sr-only" />
+                                    <span class="sr-only">Green</span>
+                                </label>
+
+                                <label for="id_colors_4"
+                                    class="block size-8 cursor-pointer rounded-full bg-yellow-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-yellow-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="5" id="id_colors_4" class="sr-only" />
+                                    <span class="sr-only">Yellow</span>
+                                </label>
+
+                                <label for="id_colors_5"
+                                    class="block size-8 cursor-pointer rounded-full bg-black shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-black has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="6" id="id_colors_5" class="sr-only" />
+                                    <span class="sr-only">Black</span>
+                                </label>
+
+                                <label for="id_colors_6"
+                                    class="block size-8 cursor-pointer rounded-full bg-white shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-black has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="7" id="id_colors_6" class="sr-only" />
+                                    <span class="sr-only">White</span>
+                                </label>
+
+                                <label for="id_colors_7"
+                                    class="block size-8 cursor-pointer rounded-full bg-gray-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-gray-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="8" id="id_colors_7" class="sr-only" />
+                                    <span class="sr-only">Gray</span>
+                                </label>
+
+                                <label for="id_colors_8"
+                                    class="block size-8 cursor-pointer rounded-full bg-pink-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-pink-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="9" id="id_colors_8" class="sr-only" />
+                                    <span class="sr-only">Pink</span>
+                                </label>
+
+                                <label for="id_colors_9"
+                                    class="block size-8 cursor-pointer rounded-full bg-purple-500 shadow-sm has-[:checked]:ring-2 has-[:checked]:ring-purple-500 has-[:checked]:ring-offset-2">
+                                    <input type="checkbox" name="colors" value="10" id="id_colors_9" class="sr-only" />
+                                    <span class="sr-only">Purple</span>
+                                </label>
+                            </fieldset>
+                        </div>
+                        <div class="space-y-2">
+                            <label for="af-submit-app-material"
+                                class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Material (Recommended)
+                            </label>
+                            <input required name="material" id="af-submit-app-material" type="text"
+                                class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                                placeholder="About material">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="af-submit-app-condition"
+                                class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Condition
+                            </label>
+                            <input required name="condition" id="af-submit-app-condition" type="text"
+                                class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                                placeholder="About condition">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="af-submit-app-Price"
+                                class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Price
+                            </label>
+                            <input required id="af-submit-app-Price" name="price" type="text"
+                                class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                                placeholder="Enter Price">
+                        </div>
+
+
+                        <div class="space-y-2">
+                            <label for="status" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                                Status:
+                            </label>
+
+                            <select required id="status" name="status"
+                                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                                <option value="active" selected="">Active</option>
+                                <option value="draft">Draft</option>
+                                <option value="sold">Sold</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-5 flex justify-center gap-x-2">
+                        <button type="submit"
+                            class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 disabled:pointer-events-none">
+                            Submit the Product
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Card -->
+
+        </form>
+        {{form.errors}}
+
+    </div>
+    <!-- End Card Section -->
+
+
+
+
+
+
+    <script src="
+    https://cdn.jsdelivr.net/npm/preline@2.3.0/dist/preline.min.js
+    "></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+
+                        'primary': '#9D977A',
+                        'primary': {
+                            50: '#9D977A',
+                            100: '#9D977A',
+                            200: '#9D977A',
+                            300: '#9D977A',
+                            400: '#9D977A',
+                            500: '#9D977A',
+                            600: '#9D977A',
+                            700: '#9D977A',
+                            800: '#9D977A',
+                            900: '#9D977A',
+                        },
+                    },
+                },
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mainCategorySelect = document.getElementById('main_category');
+            const subCategorySelect = document.getElementById('sub_category');
+            const subSubCategorySelect = document.getElementById('sub_sub_category');
+            const brandSelect = document.getElementById('brand');
+            const sizeSelect = document.getElementById('size');
+
+            mainCategorySelect.addEventListener('change', function () {
+                fetchSubcategories(this.value, subCategorySelect);
+                subSubCategorySelect.innerHTML = '<option value="">Select Sub Sub Category</option>';
+                brandSelect.innerHTML = '<option value="">Select Brand</option>';
+                sizeSelect.innerHTML = '<option value="">Select Size</option>';
+            });
+
+            subCategorySelect.addEventListener('change', function () {
+                fetchSubcategories(this.value, subSubCategorySelect);
+                fetchBrandsAndSizes(this.value);
+            });
+
+            subSubCategorySelect.addEventListener('change', function () {
+                fetchBrandsAndSizes(this.value);
+            });
+        });
+
+        function fetchSubcategories(categoryId, targetSelect) {
+            fetch(`/user/get_subcategories/${categoryId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    targetSelect.innerHTML = '<option value="">Select Sub Category</option>';
+                    data.forEach(item => {
+                        targetSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                });
+        }
+
+        function fetchBrandsAndSizes(categoryId) {
+            fetch(`/user/get_brands_and_sizes/${categoryId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const brandSelect = document.getElementById('brand');
+                    const sizeSelect = document.getElementById('size');
+
+                    brandSelect.innerHTML = '<option value="">Select Brand</option>';
+                    data.brands.forEach(item => {
+                        brandSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                    });
+
+                    sizeSelect.innerHTML = '<option value="">Select Size</option>';
+                    data.sizes.forEach(item => {
+                        sizeSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                    });
+                });
+        }
+    </script>
+
+</body>
+
+</html>

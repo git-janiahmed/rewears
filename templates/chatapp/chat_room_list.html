@@ -1,0 +1,6 @@
+<h2>My Chat Rooms</h2>
+<ul>
+  {% for chat_room in object_list %}
+  <li><a href="{% url 'chat_room_detail' chat_room.pk %}">{{ chat_room.product.title }} </a></li>
+  {% endfor %}
+</ul>

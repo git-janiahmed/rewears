@@ -1,0 +1,86 @@
+<!-- templates/chat_inbox.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+
+
+
+    <div class="inbox_section">
+
+      <h1>Chat with Sellers / Buyers </h1>
+
+      <div class="inbox">
+        <div class="contacts">
+          <div class="con_top">
+            Contacts
+          </div>
+          <div class="contact_div">
+
+            {% for chat in chats %}
+            <a href="{% url 'chat_detail' chat.pk %}">
+              {% for participant in chat.participants.all %}
+              {% if participant != user %}
+              <img src="{{ chat.product.images.first.image.url }} " alt="{{ chat.product.title}}">
+              <div class="txt">
+                <span class="username"> {{ participant.username }}</span>
+                <p>
+                  chat with {{ participant.username }} on {{chat.product}}
+                </p>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </a>
+            {% empty %}
+            <li>No chats available.</li>
+            {% endfor %}
+          </div>
+
+        </div>
+        <div class=" message_area">
+          <div class="msg_top">
+            Inbox
+          </div>
+          <div class="message_content">
+            <div class="empty">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                <rect width="256" height="256" fill="none" />
+                <path d="M32,56H224a0,0,0,0,1,0,0V192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V56A0,0,0,0,1,32,56Z" fill="none"
+                  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+                <polyline points="224 56 128 144 32 56" fill="none" stroke="currentColor" stroke-linecap="round"
+                  stroke-linejoin="round" stroke-width="16" /></svg>
+              <p>
+                Select a contact to chat with buyer/seller.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

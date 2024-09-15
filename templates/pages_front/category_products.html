@@ -1,0 +1,182 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+  <style>
+    .filters {
+      margin-bottom: 20px;
+    }
+
+    .filters form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .filters select {
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .product-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 15px;
+      text-align: center;
+    }
+
+    .product-name {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .product-price {
+      color: #007bff;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0 0;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .pagination span,
+    .pagination a {
+      padding: 8px 16px;
+      margin: 2px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .pagination .current {
+      background-color: #007bff;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <h1>{{ category.name }} Products</h1>
+
+  <!-- Filters -->
+  <div class="filters">
+    <form method="get">
+      <select name="brand">
+        <option value="">All Brands</option>
+        {% for brand in brands %}
+        <option value="{{ brand.id }}" {% if request.GET.brand == brand.id|stringformat:"s" %}selected{% endif %}>
+          {{ brand.name }}</option>
+        {% endfor %}
+      </select>
+      <select name="size">
+        <option value="">All Sizes</option>
+        {% for size in sizes %}
+        <option value="{{ size.id }}" {% if request.GET.size == size.id|stringformat:"s" %}selected{% endif %}>
+          {{ size.name }}</option>
+        {% endfor %}
+      </select>
+      <select name="color">
+        <option value="">All Colors</option>
+        {% for color in colors %}
+        <option value="{{ color.id }}" {% if request.GET.color == color.id|stringformat:"s" %}selected{% endif %}>
+          {{ color.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </div>
+
+  <!-- Products List -->
+  <div class="products-container">
+    {% for product in products %}
+    <a href="{% url 'product-detail' product.id %}" class="product-card">
+      {% if product.images.exists %}
+      <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="product-image">
+      {% else %}
+      <img src="/static/default-image.jpg" alt="{{ product.title }}" class="product-image">
+      <!-- Default image if no image is available -->
+      {% endif %}
+      <div class="product-info">
+        <h2 class="product-name">{{ product.title }}</h2>
+        <p class="product-price">${{ product.price }}</p>
+      </div>
+    </a>
+    {% empty %}
+    <p>No products found in this category.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination">
+    {% if products.has_previous %}
+    <a
+      href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}page={{ products.previous_page_number }}">Previous</a>
+    {% else %}
+    <span>Previous</span>
+    {% endif %}
+
+    {% for page_num in products.paginator.page_range %}
+    {% if products.number == page_num %}
+    <span class="current">{{ page_num }}</span>
+    {% else %}
+    <a
+      href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
+    {% endif %}
+    {% endfor %}
+
+    {% if products.has_next %}
+    <a
+      href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}page={{ products.next_page_number }}">Next</a>
+    {% else %}
+    <span>Next</span>
+    {% endif %}
+  </div>
+
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

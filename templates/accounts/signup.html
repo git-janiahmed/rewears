@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+</head>
+
+<body>
+
+  {% include '../components/mainheader.html' %}
+
+  <div class="form_main">
+    <div class="form_inner">
+      <div class="form_head">
+        <h3>
+          Sell without fees.
+          <br>
+          Embrace sustainable fashion.
+        </h3>
+        <div class="form_options">
+          <a href="{% url 'login' %}" class="option ">
+            log in
+          </a>
+          <a href="{% url 'signup' %}" class="option selected ">
+            Register
+          </a>
+        </div>
+      </div>
+      <form class="form_content" method="post">
+        {% csrf_token %}
+
+        <p class="centered">
+          or Log In with your Email
+        </p>
+
+        <div class="input_group">
+          <div class="input_div">
+            <label for="">First Name *</label>
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+          </div>
+          <div class="input_div">
+            <label for="">Last Name *</label>
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+
+          </div>
+        </div>
+        <div class="input_div">
+          <label for="">Email *</label>
+          {{ form.email }}
+          {{ form.email.errors }}
+
+        </div>
+        <div class="input_div">
+          <label for="">Password *</label>
+          {{ form.password }}
+          {{ form.password.errors }}
+
+        </div>
+        <div class="check">
+          <p>
+            {{ form.accept_terms }}
+            {{ form.accept_terms.errors }}
+
+            By clicking sign up, I hereby agree and consent to re-wears Terms & Conditions; I confirm that I have read
+            re-wears Privacy Policy; and I certify that I am 18 years or older.
+          </p>
+        </div>
+        <div class="input_div">
+          <input type="submit" class="submit_btn" value="CREATE ACCOUNT">
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

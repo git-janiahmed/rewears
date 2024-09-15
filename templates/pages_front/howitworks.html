@@ -1,0 +1,121 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="howitworks">
+    <div class="sell_bg">
+      <div class="top_banner">
+        <div class="inner">
+          <h2>
+            re-wears, your go-to platform for selling and buying pre-owned pieces
+          </h2>
+          <p>
+            We're all about clean, sustainable living. Bid farewell to closet clutter and say hello to conscious
+            consumerism.
+          </p>
+        </div>
+      </div>
+      <div class="sell_div">
+        <h2>
+          How to Sell
+        </h2>
+        <div class="flex">
+          <img src="{%  static 'images/sell_img.png' %}" alt="">
+          <div class="sell_working">
+            <div class="point">
+              <div class="no">
+                01
+              </div>
+              <p>
+                Create an account and give your preloved clothes a new life.
+              </p>
+            </div>
+            <div class="point">
+              <div class="no">
+                02
+              </div>
+              <p>
+                List your item, snap photos, describe it, and set your price – breathe new creativity into your
+                wardrobe.
+              </p>
+            </div>
+            <div class="point">
+              <div class="no">
+                03
+              </div>
+              <p>
+                Communicate with buyers, agree on shipping or pickup, and receive payments directly. It's your platform
+                to
+                sell, with every dirham staying in your pocket.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="sell_cta">
+          <a href="{% url 'signup' %}" class="btn p_btn">Start earning</a>
+        </div>
+      </div>
+    </div>
+    <div class="buy_bg">
+      <div class="sell_div">
+        <h2>
+          How to Buy
+        </h2>
+        <div class="flex">
+          <div class="sell_working">
+            <div class="point">
+              <div class="no">
+                01
+              </div>
+              <p>
+                Create an account and join our community dedicated to sustainable living. </p>
+            </div>
+            <div class="point">
+              <div class="no">
+                02
+              </div>
+              <p>
+                Explore our catalog and find preloved gems waiting for a second chance.
+              </p>
+            </div>
+            <div class="point">
+              <div class="no">
+                03
+              </div>
+              <p>
+                Communicate with sellers, agree on shipping or pickup, and make direct payments. It's a platform where
+                buyers and sellers connect for a sustainable fashion revolution.
+              </p>
+            </div>
+          </div>
+          <img src="{%  static 'images/buy_img.png' %}" alt="">
+
+        </div>
+        <div class="sell_cta">
+          <a href="{% url 'signup' %}" class="btn p_btn">Start Browsing</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

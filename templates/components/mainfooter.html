@@ -1,0 +1,66 @@
+{% load static %}
+
+
+<footer class="primary_footer">
+  <div class="footer_inner">
+    <div class="footer_grid">
+      <div class="left">
+        <h3>
+          About re-wears
+        </h3>
+        <p>
+          re-wears, your go-to platform for selling and buying pre-owned pieces. We're all about clean, sustainable
+          living. Bid farewell to closet clutter and say hello to conscious consumerism.
+        </p>
+        <div class="socials">
+          <div class="icon_wrapper">
+            <img src="{%  static 'images/icons/insta.svg' %}" alt="">
+          </div>
+          <div class="icon_wrapper">
+            <img src="{%  static 'images/icons/fb.svg' %}" alt="">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="footer_col">
+          <h3>
+            re-wears
+          </h3>
+
+          <div class="footer_links">
+            <a href="{% url 'about' %}"> About Us</a>
+            <a href="{% url 'advertising' %}"> Advertising </a>
+          </div>
+        </div>
+        <div class="footer_col">
+          <h3>
+            Discover
+          </h3>
+
+          <div class="footer_links">
+            <a href="{% url 'howitworks' %}"> How it woks</a>
+            <a href="{% url 'howitworks' %}"> Selling </a>
+            <a href="{% url 'howitworks' %}"> Buying </a>
+          </div>
+        </div>
+        <div class="footer_col">
+          <h3>
+            Help
+          </h3>
+          <div class="footer_links">
+            <a href="{% url 'helpcenter' %}"> Help center </a>
+            <a href="#"> Contact us </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer_bottom">
+      <div class="footer_links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>

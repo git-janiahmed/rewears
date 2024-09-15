@@ -1,0 +1,552 @@
+body {
+  font-size: 14px;
+}
+
+.profile_banner {
+  background-color: #fff;
+  display: flex;
+  align-items: start;
+  max-width: 1100px;
+  width: 100%;
+  margin: auto;
+  border-radius: 12px;
+  padding: 20px;
+  gap: 20px;
+}
+.profile_banner .name_div {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  width: 35%;
+}
+.profile_banner .name_div .profile_pic {
+  width: 100px;
+  height: 100px;
+  background-color: #465A63;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.profile_banner .name_div .profile_pic p {
+  font-size: 30px;
+  font-weight: 600;
+}
+.profile_banner .name_div .details .username {
+  font-weight: 600;
+}
+.profile_banner .name_div .details .reviews {
+  font-size: 12px;
+}
+.profile_banner .name_div .details .reviews {
+  color: #797979;
+}
+.profile_banner .name_div .details .pop {
+  margin-top: 10px;
+  display: flex;
+  gap: 50px;
+}
+.profile_banner .name_div .details .pop .count {
+  font-size: 20px;
+  font-weight: 600;
+  color: #9D977A;
+}
+.profile_banner .details_div {
+  width: 50%;
+  display: flex;
+  gap: 10px;
+}
+.profile_banner .details_div h4 {
+  color: #797979;
+  font-weight: 500;
+}
+.profile_banner .details_div > div {
+  background-color: #F5F5F5;
+  padding: 10px;
+  border-radius: 12px;
+}
+.profile_banner .details_div .about {
+  width: 60%;
+}
+.profile_banner .details_div .about > div {
+  display: flex;
+  margin: 10px 0px;
+  gap: 5px;
+}
+.profile_banner .details_div .about > div img {
+  width: 12px;
+}
+.profile_banner .details_div .verification {
+  width: 40%;
+}
+.profile_banner .details_div .verification > div {
+  display: flex;
+  margin: 10px 0px;
+  gap: 5px;
+}
+.profile_banner .details_div .verification > div img {
+  width: 12px;
+}
+.profile_banner .btnDiv {
+  width: 15%;
+}
+.profile_banner .btnDiv .outline_btn {
+  gap: 5px;
+}
+
+.user .bg_light {
+  padding: 50px;
+}
+
+.dashboard_items {
+  background-color: #fff;
+  max-width: 1100px;
+  width: 100%;
+  margin: 30px auto;
+  border-radius: 12px;
+}
+.dashboard_items a {
+  color: #000;
+}
+.dashboard_items .top {
+  display: flex;
+  margin: 0px 20px;
+  border-bottom: 1px solid #9D977A;
+}
+.dashboard_items .top a {
+  padding: 15px 20px;
+}
+.dashboard_items .top a.active {
+  color: #9D977A;
+  font-weight: 600;
+  border-bottom: 2px solid #9D977A;
+}
+.dashboard_items .options {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 20px;
+  margin-bottom: 40px;
+}
+.dashboard_items .options a {
+  padding: 5px 20px;
+  border: 1px solid #DCDCDC;
+  border-radius: 50px;
+  max-width: 100px;
+  width: 100%;
+  text-align: center;
+}
+.dashboard_items .options a.active {
+  background-color: #9D977A;
+  border: 1px solid #9D977A;
+  color: #fff;
+}
+.dashboard_items .empty {
+  padding: 80px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.dashboard_items .empty p {
+  color: #797979;
+}
+.dashboard_items .empty .btn {
+  color: #fff;
+}
+.dashboard_items .empty img {
+  max-width: 50px;
+  width: 100%;
+}
+.dashboard_items .not_empty {
+  padding: 0px 20px;
+  padding-bottom: 40px;
+}
+.dashboard_items .not_empty .count {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.dashboard_items .not_empty .products_grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+.dashboard_items .not_empty .products_grid .product {
+  display: block;
+  text-decoration: none;
+  border: 1px solid #DCDCDC;
+  border-radius: 20px;
+}
+.dashboard_items .not_empty .products_grid .product img {
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  max-height: 250px;
+  display: block;
+  border-bottom: 1px solid #DCDCDC;
+}
+.dashboard_items .not_empty .products_grid .product .inner {
+  padding: 13px 15px;
+}
+.dashboard_items .not_empty .products_grid .product .inner h4 {
+  margin-bottom: 6px;
+}
+.dashboard_items .not_empty .products_grid .product .inner p {
+  font-size: 10px;
+}
+.dashboard_items .reviews_area {
+  padding: 20px;
+}
+.dashboard_items .reviews_area .review_div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F5F5F5;
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin: 20px 0px;
+}
+.dashboard_items .reviews_area .review_div .left {
+  display: flex;
+  gap: 20px;
+}
+.dashboard_items .reviews_area .review_div .left .product img {
+  width: 60px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 10px;
+}
+.dashboard_items .reviews_area .review_div .left .review_comment {
+  margin: 10px;
+}
+.dashboard_items .reviews_area .review_div .left .review_comment .stars i {
+  font-size: 13px;
+}
+.dashboard_items .reviews_area .review_div .left .review_comment h4 {
+  margin: 10px 0px;
+}
+.dashboard_items .reviews_area .review_div a {
+  text-decoration: none;
+  color: #000;
+  display: inline-block;
+}
+
+.orders_section {
+  padding: 20px;
+}
+.orders_section h2 {
+  margin: 20px 0px;
+  margin-bottom: 40px;
+}
+.orders_section table {
+  width: 100%;
+  text-align: center;
+  background-color: #F5F5F5;
+  border-radius: 10px;
+  overflow: hidden;
+  border-collapse: collapse;
+}
+.orders_section table th {
+  background-color: #9D977A;
+  color: #DAD0C9;
+}
+.orders_section table td,
+.orders_section table th {
+  padding: 10px;
+}
+.orders_section table .product_col {
+  text-align: left;
+}
+.orders_section table .product_col .flx {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.orders_section table .product_col .flx img {
+  width: 100%;
+  max-width: 50px;
+  border-radius: 6px;
+}
+.orders_section table .sts {
+  background: #797979;
+  padding: 5px 14px;
+  display: inline-block;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #fff;
+}
+.orders_section table .sts.pending {
+  background-color: #b0b000;
+}
+.orders_section table .sts.confirmed {
+  background-color: blue;
+}
+.orders_section table .sts.delivered {
+  background-color: #2b7647;
+}
+.orders_section table .btn {
+  cursor: pointer;
+  background: #797979;
+  padding: 5px 14px;
+  display: inline-block;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #fff;
+  border: none;
+}
+.orders_section table .btn.conf {
+  background-color: blue;
+}
+.orders_section table .btn.suces {
+  background-color: #2b7647;
+}
+
+.review_seller_section {
+  padding: 20px;
+}
+.review_seller_section h2 {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+.review_seller_section .product_info {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.review_seller_section .product_info img {
+  max-width: 80px;
+  width: 100%;
+  border-radius: 8px;
+}
+.review_seller_section .product_info .txt {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.review_seller_section .product_info .txt p {
+  color: #797979;
+  font-size: 14px;
+}
+.review_seller_section form {
+  margin-top: 10px;
+}
+.review_seller_section .star-rating {
+  margin-top: 10px;
+  display: flex;
+  font-size: 16px;
+  color: #d3d3d3;
+  cursor: pointer;
+}
+.review_seller_section .star-rating .fa-star {
+  margin: 0;
+}
+.review_seller_section .star-rating .fa-star.selected,
+.review_seller_section .star-rating .fa-star:hover {
+  color: #ffd700;
+}
+.review_seller_section .star-rating input[type=radio] {
+  display: none;
+}
+.review_seller_section .star-rating label {
+  display: inline-block;
+}
+.review_seller_section .form-group {
+  margin-bottom: 1rem;
+}
+.review_seller_section textarea {
+  width: 100%;
+  height: 100px;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+.inbox_section {
+  max-width: 1100px;
+  width: 100%;
+  margin: 30px auto;
+  border-radius: 12px;
+}
+.inbox_section h1 {
+  margin-bottom: 30px;
+}
+.inbox_section .inbox {
+  display: flex;
+  gap: 20px;
+}
+.inbox_section .inbox .contacts {
+  background-color: #fff;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 10px;
+  padding: 10px;
+  width: 27%;
+}
+.inbox_section .inbox .contacts .con_top {
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 1px solid #ededed;
+}
+.inbox_section .inbox .contact_div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: scroll;
+  height: 400px;
+}
+.inbox_section .inbox .contact_div a {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  color: #9D977A;
+}
+.inbox_section .inbox .contact_div a img {
+  max-width: 50px;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 7px;
+}
+.inbox_section .inbox .contact_div a .txt .username {
+  font-weight: 600;
+}
+.inbox_section .inbox .contact_div a .txt p {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #797979;
+}
+.inbox_section .inbox .contact_div a:hover {
+  border-radius: 7px;
+  background-color: #ECECEC;
+}
+.inbox_section .inbox .message_area {
+  background-color: #fff;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 10px;
+  padding: 10px;
+  width: 73%;
+}
+.inbox_section .inbox .message_area .msg_top {
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 1px solid #ededed;
+}
+.inbox_section .inbox .message_area .empty {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.inbox_section .inbox .message_area .empty svg {
+  width: 150px !important;
+  color: #9D977A;
+}
+.inbox_section .inbox .message_area .message_content .about_product {
+  border: 1px solid #DCDCDC;
+  background-color: #F8F8F8;
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.inbox_section .inbox .message_area .message_content .about_product .left {
+  display: flex;
+  gap: 20px;
+}
+.inbox_section .inbox .message_area .message_content .about_product .left img {
+  max-width: 60px;
+  width: 100%;
+  border-radius: 7px;
+}
+.inbox_section .inbox .message_area .message_content .about_product .right a {
+  display: inline-block;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 20px;
+  border-radius: 20px;
+  background-color: #9D977A;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div {
+  height: 300px;
+  overflow-y: scroll;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 10px;
+  gap: 10px;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log .inner {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+  border-radius: 6px;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log .inner .timestamp {
+  font-size: 10px;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log .me {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  flex-direction: column;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log .me .inner {
+  background-color: #F8F8F8;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log .other {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  flex-direction: column;
+}
+.inbox_section .inbox .message_area .message_content .msgs_div #chat-log .other .inner {
+  border: 1px solid #DCDCDC;
+}
+.inbox_section .inbox .message_area .message_content .send_msg_form {
+  width: 100%;
+  background-color: #F8F8F8;
+  display: flex;
+  margin-top: 10px;
+  border-top: 1px solid #DCDCDC;
+  padding-top: 10px;
+  border-radius: 50px;
+}
+.inbox_section .inbox .message_area .message_content .send_msg_form textarea {
+  width: 90%;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 10px;
+  font-size: 18px;
+  padding-left: 20px;
+}
+.inbox_section .inbox .message_area .message_content .send_msg_form #chat-message-submit {
+  width: 10%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #9D977A;
+}
+.inbox_section .inbox .message_area .message_content .send_msg_form #chat-message-submit svg {
+  width: 30px;
+}/*# sourceMappingURL=user.css.map */

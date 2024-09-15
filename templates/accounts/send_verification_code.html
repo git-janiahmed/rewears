@@ -1,0 +1,6 @@
+<h2>Send Verification Code</h2>
+<p>A verification code has been sent to your email. Please check your inbox.</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Send Again</button>
+</form>

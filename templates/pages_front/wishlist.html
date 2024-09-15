@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="wishlist_content">
+    <div class="wishlist_top">
+      <h2>
+        Your Wishlist
+      </h2>
+
+    </div>
+    {% if wishlist_items %}
+
+    <div class="wishlist_grid">
+
+      {% for item in wishlist_items %}
+      <div class="wishlist_product">
+        <a href="{% url 'product-detail' item.product.id %}" class="w-img">
+          <img style="height: 250px;width: 100%;object-fit: cover;" src="{{ item.product.images.first.image.url }}"
+            alt="{{ item.product.title }}">
+
+          <form method="post" action="{% url 'remove_from_wishlist' item.product.id %}" class="heart_label">
+            {% csrf_token %}
+            <button type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                <path
+                  d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
+                </path>
+              </svg>
+              <div class="heart_no">
+                Delete
+              </div>
+            </button>
+          </form>
+        </a>
+        <div class="w-inner">
+          <div class="price">
+            AED <span>{{ item.product.price }}</span>
+          </div>
+          <div class="size">
+            Size : {{ item.product.size }}
+          </div>
+          <div class="title">
+            {{ item.product.title }}
+          </div>
+        </div>
+        <div class="w-footer">
+          by <a href="#">{{ item.product.user }}</a>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+    {% else %}
+    <h2 style="text-align: center;">Your wishlist is empty!</h2>
+    {% endif %}
+  </div>
+
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

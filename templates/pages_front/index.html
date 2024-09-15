@@ -1,0 +1,37 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body>
+  {% include '../components/mainheader.html' %}
+
+  <div class="index_hero">
+    <video autoplay muted loop id="myVideo">
+      <source src="{%  static 'assets/index_bg.mov' %}" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="content">
+      <h2>
+        Say goodbye to closet clutter
+      </h2>
+      <a href="{% url 'login' %}" class="btn p_btn">Sell Now</a>
+      <p class="colored">
+        Learn how it works
+      </p>
+    </div>
+  </div>
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

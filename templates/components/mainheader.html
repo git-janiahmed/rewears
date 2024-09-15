@@ -1,0 +1,279 @@
+{% load static %}
+<style>
+  .mega-menu {
+    background-color: #ffffff;
+    color: #333;
+    padding: 10px;
+  }
+
+  .main-menu {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+  }
+
+  .main-item {
+    position: relative;
+    margin: 0 20px;
+  }
+
+  .main-item>a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .main-item>a:hover {
+    color: #9D977A;
+  }
+
+  .main-item>a>.icon {
+    margin-right: 8px;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+  }
+
+  .main-item>a:hover>.icon {
+    transform: rotate(20deg);
+    color: #9D977A;
+  }
+
+  .sub-menu,
+  .sub-sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f5f5f5;
+    padding: 10px 0;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    min-width: 220px;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .sub-sub-menu {
+    left: 100%;
+    top: 0;
+    transform: translateX(10px);
+  }
+
+  .sub-menu .sub-item,
+  .sub-sub-menu .sub-sub-item {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sub-menu a,
+  .sub-sub-menu a {
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #333;
+    display: block;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sub-menu a:hover,
+  .sub-sub-menu a:hover {
+    background-color: #e0e0e0;
+    color: #9D977A;
+  }
+
+  .main-item:hover>.sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .sub-item:hover>.sub-sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  /* Icons */
+  .icon-category {
+    content: "\f015";
+  }
+
+  /* Example icon for categories */
+  .icon-men:before {
+    content: "👔";
+  }
+
+  .icon-women:before {
+    content: "👗";
+  }
+
+  .icon-kids:before {
+    content: "🧸";
+  }
+
+  .icon-beauty:before {
+    content: "💄";
+  }
+
+  /* Arrow Icons */
+  .arrow-right::after {
+    content: "➔";
+    font-size: 14px;
+    color: #9D977A;
+    margin-left: 8px;
+  }
+
+  /* Responsive Behavior */
+  @media (max-width: 768px) {
+    .main-menu {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .main-item {
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    .main-item>a {
+      text-align: center;
+      justify-content: center;
+    }
+
+    .sub-menu,
+    .sub-sub-menu {
+      position: static;
+      transform: none;
+      opacity: 1;
+      visibility: visible;
+      box-shadow: none;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .sub-menu a,
+    .sub-sub-menu a {
+      padding: 10px 20px;
+    }
+  }
+</style>
+
+
+<header class="primary_header">
+  <div class="header_top">
+    <div class="search_div">
+
+      <form action="{% url 'search_products' %}" method="get">
+
+        <input type="text" required placeholder="Search for items" name="q">
+        <button type="submit">
+          <img src="{%  static 'images/icons/search.svg' %}" alt="">
+        </button>
+      </form>
+      {% if user.is_authenticated %}
+      <a class="wishlist_a" href="{% url 'wishlist' %}">
+        <img src="{%  static 'images/icons/heart.svg' %}" alt="">
+        Wishlist
+      </a>
+      {% endif %}
+    </div>
+    <a href="{% url 'homepage' %}" class="logo_div">
+      <img src="{%  static 'images/logo.svg' %}" alt="" class="logo">
+
+    </a>
+    <div class="top_links">
+      {% if user.is_authenticated %}
+
+      <a href="{% url 'order_list' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+          <path
+            d="M216,64H176a48,48,0,0,0-96,0H40A16,16,0,0,0,24,80V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm88,168H40V80H80V96a8,8,0,0,0,16,0V80h64V96a8,8,0,0,0,16,0V80h40Z">
+          </path>
+        </svg> <span>Your Orders</span>
+      </a>
+      <a href="{% url 'chat_inbox' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+          <path
+            d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z">
+          </path>
+        </svg> Messages
+      </a>
+      <a href="{% url 'userdashboardIndex' %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+          <path
+            d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z">
+          </path>
+        </svg> Account
+      </a>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button style="border: none;cursor: pointer;" type="submit" class="btn p_btn">Log Out</button>
+      </form>
+      {% else %}
+      <a href="{% url 'login' %}">
+        <img src="{%  static 'images/icons/person.svg' %}" alt="">
+        <span>Log in</span>
+      </a>
+      <!-- <a href="{% url 'wishlist' %}">
+        <img src="{%  static 'images/icons/heart.svg' %}" alt="">
+        Wishlist
+      </a> -->
+      <a href="{% url 'signup' %}" class="btn p_btn">Sell Now</a>
+      {% endif %}
+
+    </div>
+  </div>
+  <nav class="mega-menu">
+    <ul class="main-menu">
+      {% for main_category in main_categories %}
+      <li class="main-item">
+        <a href="{% url 'category_products' main_category.id %}">
+          <span
+            class="icon {% if main_category.name == 'Men' %}icon-men{% elif main_category.name == 'Women' %}icon-women{% elif main_category.name == 'Kids' %}icon-kids{% elif main_category.name == 'Beauty' %}icon-beauty{% endif %}"></span>
+          {{ main_category.name }}
+        </a>
+        {% if main_category.children.exists %}
+        <ul class="sub-menu">
+          {% for sub_category in main_category.children.all %}
+          <li class="sub-item">
+            <a href="{% url 'category_products' sub_category.id %}">
+              {{ sub_category.name }}
+              {% if sub_category.children.exists %}
+              <span class="arrow-right"></span>
+              {% endif %}
+            </a>
+            {% if sub_category.children.exists %}
+            <ul class="sub-sub-menu">
+              {% for sub_sub_category in sub_category.children.all %}
+              <li class="sub-sub-item">
+                <a href="{% url 'category_products' sub_sub_category.id %}">{{ sub_sub_category.name }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,177 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+    <div class="profile_banner">
+      <div class="name_div">
+        <div class="profile_pic">
+          <p>
+            M
+          </p>
+        </div>
+        <div class="details">
+          <div class="username">
+            @{{ user }}
+          </div>
+          <div class="reviews">
+            No reviews yet
+          </div>
+          <div class="pop">
+            <div class="followers">
+              <div class="count">
+                0
+              </div>
+              <p>
+                Followers
+              </p>
+            </div>
+            <div class="followers">
+              <div class="count">
+                4
+              </div>
+              <p>
+                Following
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="details_div">
+        <div class="about">
+          <h4>
+            About
+          </h4>
+          <div class="address">
+            <img src="{%  static 'images/icons/location.svg' %}" alt="location">
+            <p>
+              Colonian Beach, VA, United States
+            </p>
+          </div>
+          <div class="lastseen">
+            <img src="{%  static 'images/icons/lastseen.svg' %}" alt="lastseen">
+            <p>
+              Last seen 10 hours ago
+            </p>
+          </div>
+        </div>
+        <div class="verification">
+          <h4>
+            <span>
+              Verified info
+            </span>
+            <img src="{%  static 'images/icons/verified_info.svg' %}" alt="lastseen">
+
+          </h4>
+          <div class="email">
+            <img src="{%  static 'images/icons/tick.svg' %}" alt="lastseen">
+            <p>
+              Email
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="btnDiv">
+        <a href="#" class="outline_btn">
+          <img src="{%  static 'images/icons/pencil.svg' %}" alt="lastseen">
+          <span>
+            Edit Profile
+          </span>
+        </a>
+      </div>
+
+    </div>
+
+
+    <div class="dashboard_items">
+      <div class="top">
+        <a href="{% url 'userdashboardIndex' %}" class="active">Closet</a>
+        <a href="{% url 'reviews_list' %}">Reviews</a>
+        <a href="{% url 'manage_orders' %}">Manage Orders</a>
+
+      </div>
+      <div class="options">
+        <div class="left">
+          <a href="{% url 'product_upload' %}" class="active">+ Add Product </a>
+
+        </div>
+        <div class="right">
+          <a href="#" class="active">Active</a>
+          <a href="#">Reserved</a>
+          <a href="#">Hidden</a>
+          <a href="#">Drafts</a>
+          <a href="#">Sold</a>
+        </div>
+      </div>
+
+      <div class="products_area">
+
+        {% if products %}
+        <div class="not_empty">
+          <div class="count">
+            {{ products.count }}
+            products
+          </div>
+          <div class="products_grid">
+            {% for product in products %}
+            <a href="{% url 'product-detail' product.id %}" class="product">
+
+              <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}">
+              <div class="inner">
+                <h4>
+                  {{ product.title }}
+                </h4>
+                <p>
+                  AED {{ product.price }}
+                </p>
+              </div>
+
+            </a>
+
+            {% endfor %}
+
+          </div>
+        </div>
+        {% else %}
+        <div class="empty">
+          <img src="{%  static 'images/icons/user/product_upload.svg' %}" alt="location">
+          <h3>
+            Upload items to start selling
+          </h3>
+          <p>
+            Sell your used clothes effortlessly, earning cash without hidden fees.
+          </p>
+          <a href="{% url 'signup' %}" class="btn p_btn">Sell Now</a>
+
+        </div>
+        {% endif %}
+
+
+
+
+      </div>
+    </div>
+
+
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

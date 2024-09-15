@@ -1,0 +1,120 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ topic.title }} | Help Center</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style/product.css' %}">
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+  <div class="helpcenter">
+    <div class="inner">
+      <div class="sidebar">
+        <h2>
+          Help Center
+        </h2>
+
+        <div class="sidebar_links">
+          <a href="{% url 'helpcenter' %}">Home</a>
+
+          {% for topic in topics %}
+          <a href="{% url 'help_topic_detail' topic.pk %}">{{ topic.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="content">
+        <h2>{{ topic.title }}</h2>
+        <div class="topic-content">
+          {{ topic.content|safe }}
+          <!-- Display the rich text content -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+</body>
+
+</html>
+
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="helpcenter">
+    <div class="inner">
+      <div class="sidebar">
+        <h2>
+          Help Center
+        </h2>
+        <div class="sidebar_links">
+          <a href="Home">Home</a>
+          <a href="Home">Getting Started</a>
+          <a href="Home">Selling</a>
+          <a href="Home">Buying</a>
+          <a href="Home">Shipping</a>
+          <a href="Home">Payments</a>
+          <a href="Home">Safety & Reporting</a>
+          <a href="Home">My account & Settings</a>
+        </div>
+      </div>
+      <div class="content">
+        <h2>
+          Advertise with re-wears
+        </h2>
+        <p>
+          Shipping arrangements are made at the discretion and agreement between the buyer and seller. Once you've
+          completed your sale, please communicate with the buyer to discuss shipping options. Currently, re-wears does
+          not provide delivery services. However, we are actively working on implementing this feature in the near
+          future. Please bear with us as we strive to enhance your experience on our platform.
+        </p>
+
+        <p>
+          Shipping arrangements are made at the discretion and agreement between the buyer and seller. Once you've
+          completed your sale, please communicate with the buyer to discuss shipping options. Currently, re-wears does
+          not provide delivery services. However, we are actively working on implementing this feature in the near
+          future. Please bear with us as we strive to enhance your experience on our platform.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>
+
+
+<h1>{{ topic.title }}</h1>
+<img src="{{ topic.icon.url }}" alt="{{ topic.title }} icon">
+<div>
+  {{ topic.content|safe }}
+</div>
+<a href="{% url 'helpcenter' %}">Back to Help Topics</a>

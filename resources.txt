@@ -1,0 +1,43 @@
+for filteration (check):
+
+https://codepen.io/danbrady/pen/VrjGEW
+
+https://www.hyperui.dev/components/application-ui/filters
+
+
+
+forms:
+
+https://www.hyperui.dev/components/marketing/forms
+
+
+for colors:
+
+https://www.hyperui.dev/components/application-ui/radio-groups
+
+sigin page css:
+
+https://www.hyperui.dev/components/application-ui/radio-groups
+
+
+mega-menu:
+https://preline.co/examples/navigations-mega-menu.html
+
+
+for authentication:
+https://preline.co/examples/forms-authentication.html
+
+form:
+https://preline.co/examples/application-form-layouts.html
+
+
+admin nav:
+https://kutty.netlify.app/components/headers/
+
+
+https://flowbite.com/docs/forms/select/
+
+//forms
+https://windstatic.com/registration?
+navbar
+https://windstatic.com/navbars#_

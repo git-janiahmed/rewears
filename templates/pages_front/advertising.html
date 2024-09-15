@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="advertising">
+    <div class="inner">
+      <div class="text">
+        <h2>
+          Advertise with re-wears
+        </h2>
+        <p>
+          Want to work with us? Please contact us at <a href="mailto:ads@re-wears.com">ads@re-wears.com</a>
+        </p>
+      </div>
+      <img src="{%  static 'images/adversting.jpg' %}" alt="advertising">
+    </div>
+  </div>
+
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

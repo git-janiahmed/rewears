@@ -1,0 +1,160 @@
+<!-- templates/chat_inbox.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+
+
+
+    <div class="inbox_section">
+
+      <h1>Chat with Sellers / Buyers </h1>
+
+      <div class="inbox">
+        <div class="contacts">
+          <div class="con_top">
+            Contacts
+          </div>
+          <div class="contact_div">
+
+            {% for chat in chats %}
+            <a href="{% url 'chat_detail' chat.pk %}">
+              {% for participant in chat.participants.all %}
+              {% if participant != user %}
+              <img src="{{ chat.product.images.first.image.url }} " alt="{{ chat.product.title}}">
+              <div class="txt">
+                <span class="username"> {{ participant.username }}</span>
+                <p>
+                  chat with {{ participant.username }} on {{chat.product}}
+                </p>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </a>
+            {% empty %}
+            <li>No chats available.</li>
+            {% endfor %}
+          </div>
+
+        </div>
+        <div class=" message_area">
+          <div class="msg_top">
+            Chat with {{ other_participant.username }}
+          </div>
+          <div class="message_content">
+
+            <div class="about_product">
+              <div class="left">
+                <img src="{{ chat.product.images.first.image.url }}" alt="">
+                <div class="txt_product">
+                  <p class="title">
+                    <strong>
+                      {{chat.product.title}}
+                    </strong>
+                  </p>
+                  <p>
+                    AED {{chat.product.price}}
+                  </p>
+                </div>
+              </div>
+              <div class="right">
+                <a href="{% url 'product-detail' chat.product.id %}"> Buy Now</a>
+              </div>
+            </div>
+
+            <!-- chat_detail.html -->
+            <div class="msgs_div">
+              <div id="chat-log">
+                {% for message in messages %}
+                {% if message.sender.username == user.username %}
+                <div class="me">
+                  <div class="inner">
+                    <strong class="username">{{ message.sender.username }} </strong>
+                    <span class="msg">
+                      {{ message.text }}
+
+                    </span>
+                    <div class="timestamp">
+                      {{ message.timestamp }}
+                    </div>
+                  </div>
+                </div>
+                {% else %}
+
+                <div class="other">
+                  <div class="inner">
+                    <strong class="username">{{ message.sender.username }} </strong>
+                    <span class="msg">
+                      {{ message.text }}
+
+                    </span>
+                    <div class="timestamp">
+                      {{ message.timestamp }}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% endfor %}
+              </div>
+
+
+            </div>
+
+
+            <form class="send_msg_form" method="post" action="{% url 'send_message' chat.id %}">
+              {% csrf_token %}
+              <textarea id="chat-message-input" name="text" rows="2" placeholder="Write a message here"></textarea>
+              <button type="submit" id="chat-message-submit"><svg xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256">
+                  <rect width="256" height="256" fill="none" />
+                  <line x1="144" y1="128" x2="80" y2="128" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="16" />
+                  <path
+                    d="M48.49,221.28A8,8,0,0,0,59.93,231l168-96.09a8,8,0,0,0,0-14l-168-95.85a8,8,0,0,0-11.44,9.67L80,128Z"
+                    fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="16" /></svg></button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <script>
+    const pusher = new Pusher('{{ PUSHER_KEY|escapejs }}', {
+      cluster: '{{ PUSHER_CLUSTER|escapejs }}'
+    });
+
+    const channel = pusher.subscribe(`chat_{{ chat.id }}`);
+    channel.bind('new_message', function (data) {
+      const message = data.message;
+      const sender = data.sender;
+      document.querySelector('#chat-log').innerHTML += `<p><strong>${sender}</strong>: ${message}</p>`;
+    });
+  </script>
+</body>
+
+</html>

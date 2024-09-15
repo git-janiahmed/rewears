@@ -1,0 +1,13 @@
+<!-- confirm_order.html -->
+
+<div class="container mx-auto py-8">
+  <h2 class="text-xl font-bold mb-4">Confirm Order</h2>
+  <p>Are you sure you want to buy {{ product.title }} for AED {{ product.price }}?</p>
+
+  <form method="post" action="{% url 'create_order' product.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn p_btn">Confirm Purchase</button>
+  </form>
+
+  <a href="{% url 'category_products' product.category.id %}" class="btn outline_btn">Cancel</a>
+</div>

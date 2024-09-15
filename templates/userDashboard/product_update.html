@@ -1,0 +1,251 @@
+{% load static %}
+
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  <h1 class="text-3xl font-bold underline">
+    Product images
+  </h1>
+  <!-- Card Section -->
+  <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Card -->
+      <div class="bg-white rounded-xl shadow">
+        <div class="p-4 sm:p-7">
+          <!-- Grid -->
+          <div class="space-y-4 sm:space-y-6">
+            <!-- Existing Product Images -->
+            <div class="space-y-2">
+              <h2 class="text-sm font-medium text-gray-800 mt-2.5">Existing Images</h2>
+              <div class="flex gap-4">
+                {% for image in product_images %}
+                <div>
+                  <img src="{{ image.image.url }}" alt="Product Image" class="w-20 h-20 object-cover rounded">
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="space-y-2">
+              <label for="images" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Product images
+              </label>
+
+              <label for="images"
+                class="group p-4 sm:p-7 block cursor-pointer text-center border-2 border-dashed border-gray-200 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2">
+                <input id="images" name="images" type="file" class="sr-only" multiple>
+                <svg class="size-10 mx-auto text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z" />
+                  <path
+                    d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                </svg>
+                <span class="mt-2 block text-sm text-gray-800">
+                  Browse your device or <span class="group-hover:text-primary-700 text-primary-600">drag 'n drop'</span>
+                </span>
+                <span class="mt-1 block text-xs text-gray-500">
+                  Maximum file size is 2 MB
+                </span>
+              </label>
+            </div>
+
+            <!-- Title -->
+            <div class="space-y-2">
+              <label for="af-submit-app-title" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Title
+              </label>
+              <input name="title" id="af-submit-app-title" type="text"
+                class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                placeholder="Enter Title" value="{{ product.title }}">
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-2">
+              <label for="af-submit-app-description" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Description
+              </label>
+              <textarea name="description" id="af-submit-app-description"
+                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                rows="6"
+                placeholder="A detailed summary will better explain your products to the audience.">{{ product.description }}</textarea>
+            </div>
+
+
+
+
+
+            <!-- Condition -->
+            <div class="space-y-2">
+              <label for="condition" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Condition
+              </label>
+              <select id="condition" name="condition"
+                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                <option value="new" {% if product.condition == 'new' %}selected{% endif %}>New</option>
+                <option value="used" {% if product.condition == 'used' %}selected{% endif %}>Used</option>
+              </select>
+            </div>
+
+            <!-- Colors -->
+
+
+
+
+            <!-- Material -->
+            <div class="space-y-2">
+              <label for="material" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Material
+              </label>
+              <input type="text" id="material" name="material"
+                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                placeholder="Enter material" value="{{ product.material }}">
+            </div>
+
+            <!-- Price -->
+            <div class="space-y-2">
+              <label for="price" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Price
+              </label>
+              <input type="number" id="price" name="price" step="0.01"
+                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                placeholder="Enter price" value="{{ product.price }}">
+            </div>
+
+            <!-- Status -->
+            <div class="space-y-2">
+              <label for="status" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Status
+              </label>
+              <select id="status" name="status"
+                class="py-2 px-3 pe-9 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+                <option value="active" {% if product.status == 'active' %}selected{% endif %}>Active</option>
+                <option value="reserved" {% if product.status == 'reserved' %}selected{% endif %}>Reserved</option>
+                <option value="draft" {% if product.status == 'draft' %}selected{% endif %}>Draft</option>
+                <option value="sold" {% if product.status == 'sold' %}selected{% endif %}>Sold</option>
+              </select>
+            </div>
+
+            <!-- Update Button -->
+            <div class="mt-2.5">
+              <button type="submit"
+                class="w-full py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-primary-500 text-white hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all text-sm">
+                Update Product
+              </button>
+            </div>
+          </div>
+          <!-- End Grid -->
+        </div>
+      </div>
+      <!-- End Card -->
+    </form>
+    {{form.errors}}
+
+  </div>
+
+
+
+
+
+
+
+
+  <script src="
+    https://cdn.jsdelivr.net/npm/preline@2.3.0/dist/preline.min.js
+    "></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+
+            'primary': '#9D977A',
+            'primary': {
+              50: '#9D977A',
+              100: '#9D977A',
+              200: '#9D977A',
+              300: '#9D977A',
+              400: '#9D977A',
+              500: '#9D977A',
+              600: '#9D977A',
+              700: '#9D977A',
+              800: '#9D977A',
+              900: '#9D977A',
+            },
+          },
+        },
+      }
+    }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mainCategorySelect = document.getElementById('main_category');
+      const subCategorySelect = document.getElementById('sub_category');
+      const subSubCategorySelect = document.getElementById('sub_sub_category');
+      const brandSelect = document.getElementById('brand');
+      const sizeSelect = document.getElementById('size');
+
+      mainCategorySelect.addEventListener('change', function () {
+        fetchSubcategories(this.value, subCategorySelect);
+        subSubCategorySelect.innerHTML = '<option value="">Select Sub Sub Category</option>';
+        brandSelect.innerHTML = '<option value="">Select Brand</option>';
+        sizeSelect.innerHTML = '<option value="">Select Size</option>';
+      });
+
+      subCategorySelect.addEventListener('change', function () {
+        fetchSubcategories(this.value, subSubCategorySelect);
+        fetchBrandsAndSizes(this.value);
+      });
+
+      subSubCategorySelect.addEventListener('change', function () {
+        fetchBrandsAndSizes(this.value);
+      });
+    });
+
+    function fetchSubcategories(categoryId, targetSelect) {
+      fetch(`/user/get_subcategories/${categoryId}/`)
+        .then(response => response.json())
+        .then(data => {
+          targetSelect.innerHTML = '<option value="">Select Sub Category</option>';
+          data.forEach(item => {
+            targetSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+          });
+        });
+    }
+
+    function fetchBrandsAndSizes(categoryId) {
+      fetch(`/user/get_brands_and_sizes/${categoryId}/`)
+        .then(response => response.json())
+        .then(data => {
+          const brandSelect = document.getElementById('brand');
+          const sizeSelect = document.getElementById('size');
+
+          brandSelect.innerHTML = '<option value="">Select Brand</option>';
+          data.brands.forEach(item => {
+            brandSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+          });
+
+          sizeSelect.innerHTML = '<option value="">Select Size</option>';
+          data.sizes.forEach(item => {
+            sizeSelect.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+          });
+        });
+    }
+  </script>
+
+</body>
+
+</html>

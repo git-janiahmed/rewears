@@ -1,0 +1,198 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+
+
+
+  <div class="product_page">
+    <div class="category_det">
+      <a href="#">Home</a>
+      <span class="dash"></span>
+      <a href="#">{{ product.category.parent.parent.name }}</a>
+      <span class="dash"></span>
+      <a href="#">{{ product.category.parent.name }}</a>
+      <span class="dash"></span>
+      <a href="#">{{ product.category.name }}</a>
+      <span class="dash"></span>
+      <a href="#" class="title">Stories Long dresses</a>
+    </div>
+    <div class="product_div">
+      <div class="product_images">
+        <div class="images">
+          {% for image in product.images.all %}
+          <img src="{{ image.image.url }}" alt="{{ product.title }}" class="sImages notactive">
+          {% endfor %}
+        </div>
+        <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="big_image">
+      </div>
+      <div class="right">
+        <div class="details_div">
+          <div class="price">
+            <h2>
+              AED {{ product.price }}
+            </h2>
+          </div>
+          <table>
+            <tr>
+              <td class="name">
+                Brand
+              </td>
+              <td class="value brand">
+                {{ product.brand.name }}
+              </td>
+            </tr>
+            <tr>
+              <td class="name">
+                Size
+              </td>
+              <td class="value">
+                {{ product.size.name }}
+
+              </td>
+            </tr>
+            <tr>
+              <td class="name">
+                Condition
+              </td>
+              <td class="value">
+                {{ product.condition }}
+              </td>
+            </tr>
+            <tr>
+              <td class="name">
+                Color
+              </td>
+              <td class="value">
+                {% for color in product.colors.all %}
+                {{ color.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <td class="name">
+                Location
+              </td>
+              <td class="value">
+                Orlando, United States
+              </td>
+            </tr>
+            <tr>
+              <td class="name">
+                Payment Options
+              </td>
+              <td class="value">
+                Not Available
+              </td>
+            </tr>
+            <!-- <tr>
+              <td class="name">
+                Views
+              </td>
+              <td class="value">
+                0
+              </td>
+            </tr> -->
+            <tr>
+              <td class="name">
+                Uploaded
+              </td>
+              <td class="value">
+                4 minutes ago
+              </td>
+            </tr>
+          </table>
+          <div class="about">
+            <h3>
+              {{ product.title }}
+            </h3>
+            <p>
+              {{ product.description }}
+            </p>
+            {% if product.status != "active" and user != product.user %}
+            <br>
+            <br>
+            <p>
+              <strong>
+                Product is already {{ product.status }}
+              </strong>
+            </p>
+
+            {% else %}
+            <div class="functions_btns">
+              <!-- <a href="" class="btn p_btn">Make an offer</a> -->
+              {% if user == product.user  %}
+              <a href="{% url 'product_update' product.id %}" class="btn p_btn">Edit Product</a>
+
+              <form method="post" action="{% url 'product_delete' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn dell_btn">Delete Product</button>
+              </form>
+
+              {% else %}
+
+              <form method="post" action="{% url 'order_create' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn p_btn">Buy Now</button>
+              </form>
+              {% if chat %}
+              <a href="{% url 'chat_detail' chat.pk %}" class="outline_btn">Message Seller</a>
+              {% else %}
+              <form method="post" action="{% url 'create_chat' object.id %}">
+                {% csrf_token %}
+                <button type="submit" class="outline_btn">Message Seller</button>
+              </form>
+              {% endif %}
+
+              <form method="post" action="{% url 'add_to_wishlist' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="outline_btn">Add to Wishlist</button>
+              </form>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const deleteModal = document.getElementById("deleteModal");
+      const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+      let productId = null;
+
+      // Show the modal and set the product ID when the delete button is clicked
+      deleteModal.addEventListener("show.bs.modal", function (event) {
+        const button = event.relatedTarget; // Button that triggered the modal
+        productId = button.getAttribute("data-product-id");
+      });
+    });
+    const smallImgs = document.querySelectorAll(".sImages");
+
+    smallImgs.forEach((img) => {
+      img.addEventListener("click", () => {
+        document.querySelector(".big_image").src = img.src;
+      })
+    })
+  </script>
+</body>
+
+</html>

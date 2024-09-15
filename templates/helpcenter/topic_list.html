@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="helpcenter">
+    <div class="inner">
+      <div class="sidebar">
+        <h2>
+          Help Center
+        </h2>
+
+        <div class="sidebar_links">
+          <a href="{% url 'helpcenter' %}">Home</a>
+
+          {% for topic in topics %}
+          <a href="{% url 'help_topic_detail' topic.pk %}">{{ topic.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="content">
+        <div class="content_flex">
+          {% for topic in topics %}
+
+          <a class="topic" href="{% url 'help_topic_detail' topic.pk %}">
+            <img src="{{ topic.icon.url }}" alt="{{ topic.title }} icon">
+            <p>
+              {{ topic.title }}
+            </p>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>
+

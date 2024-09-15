@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="wishlist_content">
+    <div class="wishlist_top">
+      <h2>
+        <h2>Search Results for "{{ query }}"</h2>
+
+      </h2>
+
+    </div>
+    {% if products %}
+
+    <div class="wishlist_grid">
+
+      {% for product in products %}
+      <div class="wishlist_product">
+        <a href="{% url 'product-detail' product.id %}" class="w-img">
+          <img style="height: 250px;width: 100%;object-fit: cover;" src="{{ product.images.first.image.url }}"
+            alt="{{ product.title }}">
+        </a>
+        <div class="w-inner">
+          <div class="price">
+            AED <span>{{ product.price }}</span>
+          </div>
+          <div class="size">
+            Size : {{ product.size }}
+          </div>
+          <div class="title">
+            {{ product.title }}
+          </div>
+        </div>
+        <div class="w-footer">
+          by <a href="{% url 'public_reviews' product.user.username %}">{{ product.user }}</a>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+    {% else %}
+    <h2 style="text-align: center;">No results found.</h2>
+    {% endif %}
+  </div>
+
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>
+
+<div class="search-results">
+  <h2>Search Results for "{{ query }}"</h2>
+
+</div>

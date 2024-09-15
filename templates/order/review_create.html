@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Review Seller</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style/user.css' %}">
+  <link rel="stylesheet" href="{% static 'style/fonts.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+  <div class="bg_light">
+    <div class="profile_banner">
+      <!-- Profile banner content here -->
+    </div>
+
+    <div class="dashboard_items">
+      <div class="top">
+        <a href="{% url 'userdashboardIndex' %}">Closet</a>
+        <a href="{% url 'reviews_list' %}">Reviews</a>
+        <a href="{% url 'manage_orders' %}">Manage Orders</a>
+      </div>
+
+      <div class="review_seller_section">
+        <h2>Review Seller</h2>
+
+        <div class="product_info">
+          <img src="{{ product.images.first.image.url }}" alt="">
+          <div class="txt">
+            <h3>
+              {{ product.title }}
+            </h3>
+            <p>
+              AED {{ product.price }}
+            </p>
+          </div>
+        </div>
+        <p>Reviewing seller: <strong>{{ product.user.first_name }} {{ product.user.last_name }}</strong> </p>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="rating">Rating:</label>
+            <div id="starRating" class="star-rating">
+              {% for i in "12345" %}
+              <span data-value="{{ i }}" class="fa fa-star"></span>
+              {% endfor %}
+            </div>
+            <input type="hidden" name="rating" id="ratingInput" required>
+          </div>
+
+          <div class="form-group">
+            <label for="id_comment">Comment:</label>
+            <textarea name="comment" id="id_comment"></textarea>
+          </div>
+
+          <button type="submit" class="btn p_btn">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const stars = document.querySelectorAll('#starRating .fa-star');
+      const ratingInput = document.getElementById('ratingInput');
+
+      stars.forEach(star => {
+        star.addEventListener('mouseover', function () {
+          const value = this.dataset.value;
+          highlightStars(value);
+        });
+
+        star.addEventListener('mouseout', function () {
+          const selectedValue = ratingInput.value;
+          highlightStars(selectedValue);
+        });
+
+        star.addEventListener('click', function () {
+          const value = this.dataset.value;
+          ratingInput.value = value;
+          highlightStars(value);
+        });
+      });
+
+      function highlightStars(value) {
+        stars.forEach(star => {
+          if (star.dataset.value <= value) {
+            star.classList.add('selected');
+          } else {
+            star.classList.remove('selected');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
