@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "commingsoon.apps.CommingsoonConfig",
+    "corsheaders",
     "accounts",
     "userarea",
     "channels",
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "tinymce",
     "helpcenter",
     "orders",
+    "usersettings",
 ]
 
 MIDDLEWARE = [
@@ -55,8 +56,17 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "accounts.middleware.update_last_seen.UpdateLastSeenMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://127.0.0.1:8000",
+#     "http://localhost:8000",
+#     "https://your-production-domain.com",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ASGI_APPLICATION = "rewears.asgi.application"  # replace with your project name
 
@@ -114,7 +124,18 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Email settings for development
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Email Settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.mailersend.net"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "MS_bExJzU@trial-3z0vklo1pw7g7qrx.mlsender.net"
+EMAIL_HOST_PASSWORD = "wlpljjtolUrxQmTx"
+DEFAULT_FROM_EMAIL = "MS_bExJzU@trial-3z0vklo1pw7g7qrx.mlsender.net"
+
+
 import os
 
 MEDIA_URL = "/media/"
@@ -145,3 +166,6 @@ PUSHER_APP_ID = "1829468"
 PUSHER_KEY = "03a7fe18314a890045ed"
 PUSHER_SECRET = "b8f5ca7457a3c3d8f46f"
 PUSHER_CLUSTER = "ap2"
+
+
+LOGIN_URL = "/login/"

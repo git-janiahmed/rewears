@@ -49,6 +49,37 @@
           {{ form.password.errors }}
 
         </div>
+
+
+        <style>
+          ul.errorlist {
+            color: red;
+            font-size: 12px;
+            list-style: none;
+          }
+
+          .guide {
+            color: #9D977A;
+            font-size: 13px;
+
+          }
+        </style>
+        <!-- Show error messages for invalid login -->
+        {% if form.non_field_errors %}
+        <div class="input_div">
+          <p style="color: red;">{{ form.non_field_errors }}</p>
+          <p class="guide">Please Try again, and if you forget your password, click the bottom buttton to recover your
+            password.</p>
+        </div>
+        {% endif %}
+
+
+
+
+        <div class="frget_div" style="text-align: right;">
+          <a style="font-size: 12px;color: #797979;text-decoration: underline;"
+            href="{% url 'password_reset' %}">Forgot-password?</a>
+        </div>
         <div class="input_div">
           <input type="submit" class="submit_btn" value="Log in">
         </div>

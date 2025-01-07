@@ -5,6 +5,7 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import User
 from userarea.models import Product
+from accounts.models import UserProfile
 
 
 class Order(models.Model):
@@ -37,12 +38,10 @@ class Review(models.Model):
         "Order", on_delete=models.CASCADE, related_name="review"
     )
     buyer = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="buyer_reviews"
+        UserProfile, on_delete=models.CASCADE, related_name="buyer_reviews"
     )
     seller = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="seller_reviews",
+        UserProfile, on_delete=models.CASCADE, related_name="seller_reviews"
     )
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
     comment = models.TextField(blank=True)

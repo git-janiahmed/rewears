@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Contact Us</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style/user.css' %}">
+  <link rel="stylesheet" href="{% static 'style/fonts.css' %}">
+  <style>
+    .message {
+      margin: 20px 0;
+      padding: 10px;
+      border: 1px solid #d4edda;
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+  <div class="bg_light">
+    <div class="settings_dashboard">
+      <div class="settings_menu">
+        <h3>Links</h3>
+        <div class="settings_links">
+          <a href="{% url 'helpcenter' %}">Help Center</a>
+          <a href="{% url 'contact' %}" class="active">Contact Us</a>
+        </div>
+      </div>
+      <div class="settings_content">
+        {% if messages %}
+        <div class="message">
+          {% for message in messages %}
+          <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" class="profile_settings profile_details">
+          {% csrf_token %}
+          <div class="inner">
+            <div class="shadow_div email">
+              <div class="lt">
+                <p><strong>Contact us</strong></p>
+                <p>
+                  <small>If you have any questions or concerns, please feel free to contact us.</small>
+                </p>
+              </div>
+            </div>
+            <div class="shadow_div personal">
+              <div class="input_div">
+                <label for="fname">Full Name*</label>
+                <input type="text" name="name" id="name" placeholder="Your Name" required>
+              </div>
+              <div class="input_div">
+                <label for="email">Email*</label>
+                <input type="email" name="email" id="email" placeholder="Your Email" required>
+              </div>
+              <div class="input_div">
+                <label for="subject">Subject*</label>
+                <input type="text" name="subject" id="subject" placeholder="Subject" required>
+              </div>
+            </div>
+            <br>
+            <div class="det">
+              <div class="abt">
+                <p><strong>Message*</strong></p>
+                <textarea name="message" id="message" placeholder="Your Message" required></textarea>
+              </div>
+            </div>
+            <div class="rt_txt">
+              <div class="rt_btn">
+                <button class="btn p_btn" type="submit">Send Message</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+</body>
+
+</html>

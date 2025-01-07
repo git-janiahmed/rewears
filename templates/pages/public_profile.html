@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load last_seen %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="{% static 'style/style.css' %}">
   <link rel="stylesheet" href="{% static 'style/user.css' %}">
   <link rel="stylesheet" href="{% static 'style/fonts.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
 </head>
 
 <body class="user">
@@ -17,87 +22,241 @@
 
   <div class="bg_light">
     <div class="profile_banner">
-      <div class="name_div">
-        <div class="profile_pic">
-          <p>{{ profile_user.first_name|default:profile_user.username|slice:":1" }}</p>
-        </div>
-        <div class="details">
-          <div class="username">@{{ profile_user.username }}</div>
-          <div class="reviews">{{ reviews.count }} reviews</div>
-          <!-- Other profile info here -->
-        </div>
-      </div>
-      <div class="details_div">
-        <div class="about">
-          <h4>About</h4>
-          <div class="address">
-            <img src="{% static 'images/icons/location.svg' %}" alt="location">
-            <p>Colonian Beach, VA, United States</p>
+      <div class="topp">
+        <div class="name_div">
+
+          <div class="profile_pic">
+            {% if profile_user.userprofile.photo %}
+            <img src="{{ profile_user.userprofile.photo.url }}" id="userPhoto" alt="user photo">
+            {% else %}
+            <p>{{ profile_user.first_name|default:profile_user.username|slice:":1" }}</p>
+            {% endif %}
           </div>
-          <div class="lastseen">
-            <img src="{% static 'images/icons/lastseen.svg' %}" alt="lastseen">
-            <p>Last seen 10 hours ago</p>
-          </div>
-        </div>
-        <div class="verification">
-          <h4><span>Verified info</span>
-            <img src="{% static 'images/icons/verified_info.svg' %}" alt="lastseen">
-          </h4>
-          <div class="email">
-            <img src="{% static 'images/icons/tick.svg' %}" alt="lastseen">
-            <p>Email</p>
-          </div>
-        </div>
-      </div>
 
-      <!-- Hide Edit Profile button if viewing another user's profile -->
-      {% if request.user == profile_user %}
-      <div class="btnDiv">
-        <a href="#" class="outline_btn">
-          <img src="{% static 'images/icons/pencil.svg' %}" alt="lastseen">
-          <span>Edit Profile</span>
-        </a>
-      </div>
+          <div class="details">
+            <div class="username">@{{ profile_user.username }}</div>
 
-      {% else %}
-
-      <style>
-        .profile_banner .details_div {
-          width: 65%;
-        }
-      </style>
-      {% endif %}
-    </div>
-
-    <div class="dashboard_items">
-      <div class="top">
-        <a href="{% url 'public_profile'  profile_user.username  %}" class="active">Closet</a>
-        <a href="{% url 'public_reviews' profile_user.username %}">Reviews</a>
-        <!-- Other links here -->
-      </div>
-      <div class="products_area">
-        {% if products %}
-        <div class="not_empty">
-          <div class="count">{{ products.count }} products</div>
-          <div class="products_grid">
-            {% for product in products %}
-            <a href="{% url 'product-detail' product.id %}" class="product">
-              <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}">
-              <div class="inner">
-                <h4>{{ product.title }}</h4>
-                <p>AED {{ product.price }}</p>
+            <div class="reviews">
+              <div class="star-rating">
+                <div class="filled-stars" style="width: {{ profile_user.userprofile|average_rating_percentage }}%">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="empty-stars">
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
               </div>
-            </a>
-            {% endfor %}
+
+              <p>{{ profile_user.userprofile |reviews_count }} Reviews</p>
+            </div>
+
+
+
+            <div class="pop">
+              <div class="followers">
+                <div class="count followersCount">
+                  {{profile_user.userprofile.followers_count}}
+                </div>
+                <p>
+                  Followers
+                </p>
+              </div>
+              <div class="followers">
+                <div class="count followingCount">
+                  {{profile_user.userprofile.following_count}}
+                </div>
+                <p>
+                  Following
+                </p>
+              </div>
+            </div>
           </div>
+
         </div>
+        <div class="details_div">
+          <div class="about">
+            <h4>About</h4>
+            <div class="address">
+              <img src="{% static 'images/icons/location.svg' %}" alt="location">
+              <p>{{ profile_user.userprofile.location }}</p>
+            </div>
+            <div class="lastseen">
+              <img src="{% static 'images/icons/lastseen.svg' %}" alt="lastseen">
+              <p>
+
+
+                Last seen {{ profile_user.userprofile.last_seen|time_since_last_seen }}
+
+              </p>
+
+            </div>
+          </div>
+          <div class="verification">
+            <h4><span>Verified info</span>
+              <img src="{% static 'images/icons/verified_info.svg' %}" alt="lastseen">
+            </h4>
+            <div class="email">
+              <img src="{% static 'images/icons/tick.svg' %}" alt="lastseen">
+              <p>Email</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Hide Edit Profile button if viewing another user's profile -->
+        {% if request.user != profile_user %}
+        <div class="btnDiv">
+          <button data-user-id="{{ profile_user.id }}" class="outline_btn" id="follow-btn" style="background: none;">
+            <svg style="fill: #9D977A;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000000"
+              viewBox="0 0 256 256">
+              <path
+                d="M144,157.68a68,68,0,1,0-71.9,0c-20.65,6.76-39.23,19.39-54.17,37.17a8,8,0,0,0,12.25,10.3C50.25,181.19,77.91,168,108,168s57.75,13.19,77.87,37.15a8,8,0,0,0,12.25-10.3C183.18,177.07,164.6,164.44,144,157.68ZM56,100a52,52,0,1,1,52,52A52.06,52.06,0,0,1,56,100Zm197.66,33.66-32,32a8,8,0,0,1-11.32,0l-16-16a8,8,0,0,1,11.32-11.32L216,148.69l26.34-26.35a8,8,0,0,1,11.32,11.32Z">
+              </path>
+            </svg>
+            <span>
+              {% if is_following %}
+              Unfollow
+              {% else %}
+              Follow
+              {% endif %}
+            </span>
+          </button>
+
+
+        </div>
+
         {% else %}
-        <div class="empty">
-          <h3>No products to display</h3>
-        </div>
+
+        <style>
+          .profile_banner .details_div {
+            width: 65%;
+          }
+        </style>
         {% endif %}
       </div>
+      <div class="bott">
+        <div class="bott">
+          <h3>
+            About Me
+          </h3>
+          {% if profile_user.userprofile.about %}
+
+          <p>{{ profile_user.userprofile.about }}</p>
+          {% else %}
+          <p>Nothing to say...</p>
+          {% endif %}
+        </div>
+      </div>
+
+
+
+
+
+
+
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const followBtn = document.getElementById("follow-btn");
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+        if (followBtn) {
+          followBtn.addEventListener("click", async function () {
+            try {
+              // Disable button during request
+              followBtn.disabled = true;
+              const userId = followBtn.dataset.userId;
+
+              const response = await fetch(`/user/${userId}/follow/`, {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": csrfToken,
+                  "Accept": "application/json",
+                },
+                // Include credentials to ensure cookies are sent
+                credentials: 'same-origin'
+              });
+
+              // Check if response is JSON
+              const contentType = response.headers.get("content-type");
+              if (!contentType || !contentType.includes("application/json")) {
+                throw new Error("Server returned non-JSON response");
+              }
+
+              const data = await response.json();
+
+              if (!response.ok) {
+                throw new Error(data.error || "Failed to update follow status");
+              }
+              console.log(data);
+              // Update button text
+              followBtn.textContent = data.status === "followed" ? "Unfollow" : "Follow";
+
+              // Update counts
+              const followersCount = document.querySelector(".followersCount");
+              const followingCount = document.querySelector(".followingCount");
+
+
+              console.log(data.followers_count)
+              if (followersCount) {
+                followersCount.textContent = data.followers_count;
+              }
+              if (followingCount) {
+                followingCount.textContent = data.following_count;
+              }
+
+            } catch (error) {
+              console.error("Error:", error);
+              alert("There was an error processing your request. Please try again.");
+            } finally {
+              // Re-enable button
+              followBtn.disabled = false;
+            }
+          });
+        }
+      });
+    </script>
+  </div>
+  </div>
+
+
+  <div class="dashboard_items">
+    <div class="top">
+      <a href="{% url 'UserProfileView'  profile_user.id  %}" class="active">Closet</a>
+      <a href="{% url 'public_reviews' profile_user.username %}">Reviews</a>
+      <!-- Other links here -->
+    </div>
+    <div class="products_area">
+      {% if products %}
+      <div class="not_empty">
+        <div class="count" style="margin: 20px 0px;">{{ products.count }} products</div>
+        <div class="products_grid">
+          {% for product in products %}
+          <a href="{% url 'product-detail' product.id %}" class="product">
+            <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}">
+            <div class="inner">
+              <h4>{{ product.title }}</h4>
+              <p>AED {{ product.price }}</p>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="empty">
+        <h3>No products to display</h3>
+      </div>
+      {% endif %}
+    </div>
+  </div>
   </div>
 
   {% include '../components/mainfooter.html' %}

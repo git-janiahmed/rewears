@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 
 from .models import Order, Review
 from userarea.models import Product
+from userarea.views import send_notification
 
 
 class OrderCreateView(LoginRequiredMixin, CreateView):
@@ -30,7 +31,16 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         Order.objects.create(
             product=product, buyer=buyer, seller=seller, status="pending"
         )
+
+        message = f"Your received a new order from {buyer}"
+        link = reverse_lazy("manage_orders")
+        send_notification(
+            seller, message, notification_type="Order confirmed", link=link
+        )
         return redirect("order_list")
+
+
+from chatapp.models import Chat
 
 
 class BuyerOrderListView(LoginRequiredMixin, ListView):
@@ -42,6 +52,18 @@ class BuyerOrderListView(LoginRequiredMixin, ListView):
         # Filter orders where the current user is the buyer
         return Order.objects.filter(buyer=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            orders = context["orders"]
+            for order in orders:
+                chat = Chat.objects.filter(
+                    product=order.product, participants=self.request.user
+                ).first()
+                order.chat = chat
+        return context
+
 
 class SellerOrderListView(LoginRequiredMixin, ListView):
     model = Order
@@ -52,6 +74,18 @@ class SellerOrderListView(LoginRequiredMixin, ListView):
         # Filter orders where the current user is the seller
         return Order.objects.filter(seller=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            orders = context["orders"]
+            for order in orders:
+                chat = Chat.objects.filter(
+                    product=order.product, participants=self.request.user
+                ).first()
+                order.chat = chat
+        return context
+
 
 class ConfirmOrderView(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):
@@ -61,6 +95,11 @@ class ConfirmOrderView(LoginRequiredMixin, View):
         product = get_object_or_404(Product, pk=order.product.id, user=request.user)
         product.status = "reserved"
         product.save()
+        message = f"{request.user.username} {order.status} your order"
+        link = reverse_lazy("order_list")
+        send_notification(
+            order.buyer, message, notification_type="Order confirmed", link=link
+        )
         return redirect("manage_orders")
 
 
@@ -72,6 +111,13 @@ class DeliverOrderView(LoginRequiredMixin, View):
         product = get_object_or_404(Product, pk=order.product.id, user=request.user)
         product.status = "sold"
         product.save()
+        message = f"{request.user.username} marked your Order {order.status}, don't forget to review the product/seller."
+        link = reverse_lazy("order_list")
+
+        send_notification(
+            order.buyer, message, notification_type="Order Completed", link=link
+        )
+
         return redirect("manage_orders")
 
 
@@ -81,14 +127,17 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     fields = ["rating", "comment"]
 
     def form_valid(self, form):
-        form.instance.buyer = self.request.user
+        user_profile = get_object_or_404(UserProfile, user=self.request.user)
+        form.instance.buyer = user_profile
         form.instance.order = get_object_or_404(
             Order,
             pk=self.kwargs["order_id"],
             buyer=self.request.user,
             status="delivered",
         )
-        form.instance.seller = form.instance.order.seller
+        form.instance.seller = get_object_or_404(
+            UserProfile, user=form.instance.order.seller
+        )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -99,7 +148,16 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def get_success_url(self):
+        message = f"{self.request.user.username} left a review for your product. Don't forget to check it out."
+        order = get_object_or_404(Order, pk=self.kwargs["order_id"])
+        link = reverse_lazy("reviews_list")
+
+        send_notification(order.seller, message, notification_type="Review", link=link)
         return reverse_lazy("order_list")
+
+
+from django.db.models import Avg, Count
+from accounts.models import UserProfile
 
 
 class ReviewsList(ListView):
@@ -108,4 +166,14 @@ class ReviewsList(ListView):
     context_object_name = "reviews"
 
     def get_queryset(self):
-        return Review.objects.filter(seller=self.request.user).select_related("buyer")
+        user_profile = get_object_or_404(UserProfile, user=self.request.user)
+        return Review.objects.filter(seller=user_profile).select_related("buyer")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_profile = get_object_or_404(UserProfile, user=self.request.user)
+        reviews = Review.objects.filter(seller=user_profile)
+        context["reviews_count"] = reviews.count()
+        context["average_rating"] = reviews.aggregate(Avg("rating"))["rating__avg"]
+        context["profile_user"] = user_profile
+        return context

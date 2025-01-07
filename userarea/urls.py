@@ -8,8 +8,15 @@ from .views import (
     get_brands_and_sizes,
     ProductUpdateView,
     ProductDeleteView,
+    UserProfileView,
+    FollowersListView,
+    FollowToggleView,
+    FollowingListView,
+    ToggleWishlistView,
+    OrderConfirmationView,
 )
 from .views import AddToWishlistView, RemoveFromWishlistView, WishlistView
+from .views import NotificationListView, MarkAsReadView, NotificationListView
 
 urlpatterns = [
     path("wishlist/", WishlistView.as_view(), name="wishlist"),
@@ -22,6 +29,11 @@ urlpatterns = [
         "wishlist/remove/<int:product_id>/",
         RemoveFromWishlistView.as_view(),
         name="remove_from_wishlist",
+    ),
+    path(
+        "wishlist/toggle/<int:product_id>/",
+        ToggleWishlistView.as_view(),
+        name="toggle_wishlist",
     ),
     path("", UserDashboardIndex.as_view(), name="userdashboardIndex"),
     path("upload/", ProductCreateView.as_view(), name="product_upload"),
@@ -43,4 +55,19 @@ urlpatterns = [
         "product/<int:pk>/delete/", ProductDeleteView.as_view(), name="product_delete"
     ),
     path("product/<int:pk>/", ProductDetailView.as_view(), name="product-detail"),
+    path("public/profile/<int:pk>/", UserProfileView.as_view(), name="UserProfileView"),
+    path("<int:pk>/follow/", FollowToggleView.as_view(), name="follow-toggle"),
+    path("<int:pk>/followers/", FollowersListView.as_view(), name="followers"),
+    path("<int:pk>/following/", FollowingListView.as_view(), name="following"),
+    path("notifications/", NotificationListView.as_view(), name="notification_list"),
+    path(
+        "notifications/mark-as-read/<int:notification_id>/",
+        MarkAsReadView.as_view(),
+        name="mark_as_read",
+    ),
+    path(
+        "order/confirmation/<int:pk>/",
+        OrderConfirmationView.as_view(),
+        name="order_confirmation",
+    ),  # Add this line
 ]

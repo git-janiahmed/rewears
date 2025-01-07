@@ -1,6 +1,5 @@
 from django.urls import path, include
 from .views import (
-    WishListView,
     AboutView,
     AdvertisingView,
     HowitWorks,
@@ -13,7 +12,6 @@ from .views import (
 
 urlpatterns = [
     path("", HomeIndexView.as_view(), name="homepage"),
-    path("wishlist", WishListView.as_view(), name="wishlist"),
     path("about", AboutView.as_view(), name="about"),
     path("advertising", AdvertisingView.as_view(), name="advertising"),
     path("howitworks", HowitWorks.as_view(), name="howitworks"),

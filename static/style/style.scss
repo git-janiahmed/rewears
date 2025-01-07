@@ -33,13 +33,14 @@ a {
   text-align: center;
   padding: 10px 20px;
 }
-.dell_btn{
+
+.dell_btn {
   background-color: #B73D4B;
   color: #fff;
 }
 
 .p_btn {
-  background-color: $primary_color;
+  background-color: $primary_color !important;
   color: #fff;
 }
 
@@ -53,19 +54,23 @@ a {
     display: flex;
     justify-content: space-between;
     align-items: center;
->*{
-  width: 100%;
-}
+
+    >* {
+      width: 100%;
+    }
+
     .search_div {
       display: flex;
       gap: 20px;
       align-items: center;
-      .wishlist_a{
+
+      .wishlist_a {
         display: flex;
         color: #000;
-gap: 10px;
+        gap: 10px;
         align-items: center;
       }
+
       form {
         max-width: 300px;
         width: 100%;
@@ -112,10 +117,14 @@ gap: 10px;
         gap: 7px;
         align-items: center;
       }
+
       svg {
         width: 24px;
         fill: #181818;
       }
+
+
+
       .p_btn {
         color: #fff;
       }
@@ -123,7 +132,11 @@ gap: 10px;
 
     .logo_div {
       text-align: center;
-max-width: 200px;
+      max-width: 200px;
+      display: flex;
+      justify-content: center;
+      margin: 20px 0px;
+
       img {
         max-width: 150px;
         width: 100%;
@@ -249,6 +262,12 @@ footer {
 
       margin-top: 20px;
       padding-top: 20px;
+
+      .footer_links {
+        display: flex;
+        gap: 30px;
+
+      }
     }
   }
 }
@@ -328,8 +347,8 @@ footer {
 .input_div {
   display: flex;
   flex-direction: column;
-  margin: 40px 0px;
-  gap: 4px;
+  margin: 30px 0px;
+  gap: 10px;
 
   label {
     font-size: 13px;
@@ -338,16 +357,43 @@ footer {
 
   input {
     border-radius: 30px;
-    padding: 20px;
+    padding: 15px;
     background-color: #F5F5F5;
     border: 1px solid #DCDCDC;
 
-    &.submit_btn {
-      background-color: #9D977A;
-      color: #fff;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
+
+  }
+
+  .submit_btn {
+    border-radius: 30px;
+    padding: 15px;
+    border: none;
+    background-color: #9D977A;
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+}
+
+.submit_btn {
+  width: 100%;
+  border-radius: 30px;
+  padding: 15px;
+  border: none;
+  background-color: #9D977A;
+  color: #fff;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+
+
+
+.check {
+  margin: 20px 0px;
+
+  p {
+    font-size: 13px;
   }
 }
 
@@ -355,6 +401,11 @@ footer {
   background-color: #F7F7F7;
 }
 
+.error-message {
+  color: red;
+  font-size: 12px;
+  font-weight: 600;
+}
 
 .outline_btn {
   background-color: none;
@@ -370,11 +421,45 @@ footer {
   align-items: center;
 }
 
+//verification-form
+
+.verification_inner {
+  margin: 70px auto !important;
+
+  .code-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 40px 0;
+  }
+
+  .code-input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .code-input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  .email-notice {
+    font-weight: 500;
+    font-size: 13px;
+    margin: 23px 0px;
+  }
+}
+
+
 // wishlist css
 
 .wishlist_content {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  border-radius: 30px;
+  border-radius: 7px;
   max-width: 1300px;
   margin: 50px auto;
   width: 100%;
@@ -391,13 +476,14 @@ footer {
     gap: 15px;
     row-gap: 30px;
 
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 
     .wishlist_product {
       border: 1px solid #DCDCDC;
       border-radius: 10px;
       overflow: hidden;
       display: block;
+
       .w-img {
         position: relative;
 
@@ -416,15 +502,17 @@ footer {
           gap: 10px;
           background-color: rgba(157, 151, 122, 0.689);
           border-radius: 10px;
-button{
-          color: #fff;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          border: none;
-          cursor: pointer;
-          background-color: transparent;
-}
+
+          button {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+          }
+
           svg {
             width: 20px;
             fill: #fff;
@@ -653,13 +741,16 @@ button{
     .content {
       padding: 20px;
       width: 70%;
-.topic-content{
-  margin-top: 20px;
-}
+
+      .topic-content {
+        margin-top: 20px;
+      }
+
       .content_flex {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-gap: 20px;
+        gap: 20px;
+
         .topic {
           display: flex;
           justify-content: center;
@@ -669,13 +760,15 @@ gap: 20px;
           width: 100%;
           text-align: center;
           border-radius: 10px;
-          padding: 20px ;
+          padding: 20px;
           min-height: 200px;
           box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-img{
-  width: 50px;
-}
-          p{
+
+          img {
+            width: 50px;
+          }
+
+          p {
             margin-top: 20px;
             font-size: 14px;
             font-weight: 600;
@@ -686,7 +779,7 @@ img{
   }
 }
 
-button{
+button {
   line-height: 1.5;
 }
 
@@ -706,4 +799,138 @@ button{
   z-index: -1;
   object-fit: cover;
   object-position: center;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+  .primary_header {
+    padding: 0px 20px;
+
+    .header_top {
+      flex-direction: column;
+      gap: 20px;
+
+      .search_div {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+
+        form {
+          max-width: 100%;
+        }
+      }
+
+      .top_links {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .logo_div {
+        max-width: 100%;
+      }
+    }
+
+    .navbar {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  .index_hero {
+    height: 475px;
+
+    .content {
+
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      margin: auto;
+    }
+  }
+
+  footer {
+    padding: 40px 20px;
+
+    .footer_inner {
+      .footer_grid {
+        flex-direction: column;
+
+        .left,
+        .right {
+          width: 100%;
+        }
+
+        .right {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+
+  .form_main .form_inner {
+    padding: 0 20px;
+  }
+
+  .input_group {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .wishlist_content {
+    padding: 20px;
+
+    .wishlist_top {
+      padding: 30px 0;
+    }
+
+    .wishlist_grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .about_content {
+    padding: 20px;
+
+    .top .gallery {
+      gap: 20px;
+      flex-direction: column;
+    }
+
+    .about_text .text_flex {
+      flex-direction: column;
+    }
+  }
+
+  .advertising .inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .howitworks {
+    padding: 15px;
+
+    .sell_div .flex {
+      flex-direction: column;
+    }
+  }
+
+  .helpcenter .inner {
+    flex-direction: column;
+
+    .sidebar,
+    .content {
+      width: 100%;
+    }
+
+    .content .content_flex {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
 }

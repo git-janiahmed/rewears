@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Page Not Found | re-wears</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <style>
+    .container {
+      max-width: 600px;
+      width: 100%;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .icon-container {
+      display: inline-block;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .icon-container svg {
+      width: 50px;
+      height: 50px;
+      color: #9D977A;
+      fill: #9D977A;
+    }
+
+    .container h1 {
+      font-size: 1.4rem;
+      color: #333333;
+      margin-bottom: 10px;
+    }
+
+    .container p {
+      font-size: 15px;
+      color: #666666;
+      margin-bottom: 20px;
+    }
+
+    .container .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #9D977A;
+      color: #ffffff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    .container .btn:hover {
+      background-color: #7b6f4f;
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'components/mainheader.html' %}
+  <div class="container">
+    <div class="icon-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+        <path
+          d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM80,108a12,12,0,1,1,12,12A12,12,0,0,1,80,108Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,176,108Zm-1.08,64a8,8,0,1,1-13.84,8c-7.47-12.91-19.21-20-33.08-20s-25.61,7.1-33.08,20a8,8,0,1,1-13.84-8c10.29-17.79,27.39-28,46.92-28S164.63,154.2,174.92,172Z">
+        </path>
+      </svg>
+    </div>
+    <h1>Page not found</h1>
+    <p>Sorry, the page you are looking for does not exist. Please check the URL or return to the homepage.</p>
+    <a href="{% url 'homepage' %}" class="btn">Go to Home</a>
+  </div>
+  {% include 'components/mainfooter.html' %}
+</body>
+
+</html>

@@ -19,81 +19,109 @@
 
   <div class="bg_light">
     <div class="profile_banner">
-      <div class="name_div">
-        <div class="profile_pic">
-          <p>
-            M
-          </p>
-        </div>
-        <div class="details">
-          <div class="username">
-            @mykola888
-          </div>
-          <div class="reviews">
-            No reviews yet
-          </div>
-          <div class="pop">
-            <div class="followers">
-              <div class="count">
-                0
-              </div>
-              <p>
-                Followers
-              </p>
-            </div>
-            <div class="followers">
-              <div class="count">
-                4
-              </div>
-              <p>
-                Following
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="details_div">
-        <div class="about">
-          <h4>
-            About
-          </h4>
-          <div class="address">
-            <img src="{%  static 'images/icons/location.svg' %}" alt="location">
-            <p>
-              Colonian Beach, VA, United States
-            </p>
-          </div>
-          <div class="lastseen">
-            <img src="{%  static 'images/icons/lastseen.svg' %}" alt="lastseen">
-            <p>
-              Last seen 10 hours ago
-            </p>
-          </div>
-        </div>
-        <div class="verification">
-          <h4>
-            <span>
-              Verified info
-            </span>
-            <img src="{%  static 'images/icons/verified_info.svg' %}" alt="lastseen">
+      <div class="topp">
+        <div class="name_div">
+          <div class="profile_pic">
 
-          </h4>
-          <div class="email">
-            <img src="{%  static 'images/icons/tick.svg' %}" alt="lastseen">
+            {% if user.userprofile.photo %}
+            <img src="{{ user.userprofile.photo.url }}" id="userPhoto" alt="user photo">
+            {% else %}
             <p>
-              Email
-            </p>
+              {{ profile_user.first_name|default:profile_user.username|slice:":1" }}
+
+            </p> {% endif %}
+
+          </div>
+
+          <div class="details">
+            <div class="username">
+              @{{ user }}
+            </div>
+            <div class="reviews">
+              <div class="star-rating">
+                <div class="filled-stars" style="width: {{ user.userprofile|average_rating_percentage }}%">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="empty-stars">
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+              </div>
+
+              <p>{{ user.userprofile |reviews_count }} Reviews</p>
+            </div>
+            <div class="pop">
+              <a href="{% url 'followers' user.userprofile.id %}" class="followers">
+                <div class="count">
+                  {{ user.userprofile.followers_count }}
+                </div>
+                <p style="color: #000;">
+                  Followers
+                </p>
+              </a>
+              <a href="{% url 'following' user.userprofile.id %}" class="followers">
+                <div class="count">
+                  {{ user.userprofile.following_count }}
+                </div>
+                <p style="color: #000;">
+                  Following
+                </p>
+              </a>
+            </div>
           </div>
         </div>
+        <div class="details_div">
+          <div class="about">
+            <h4>
+              About
+            </h4>
+            <div class="address">
+              <img src="{%  static 'images/icons/location.svg' %}" alt="location">
+              <p>
+                {{ user.userprofile.location }}
+
+              </p>
+            </div>
+            <div class="lastseen">
+              <img src="{%  static 'images/icons/lastseen.svg' %}" alt="lastseen">
+              <p>
+                Last seen {{ user.userprofile.last_seen|time_since_last_seen }}
+              </p>
+            </div>
+          </div>
+          <div class="verification">
+            <h4>
+              <span>
+                Verified info
+              </span>
+              <img src="{%  static 'images/icons/verified_info.svg' %}" alt="lastseen">
+
+            </h4>
+            <div class="email">
+              <img src="{%  static 'images/icons/tick.svg' %}" alt="lastseen">
+              <p>
+                Email
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="btnDiv">
+          <a href="{% url 'userprofile' %}" class="outline_btn">
+            <img src="{%  static 'images/icons/pencil.svg' %}" alt="lastseen">
+            <span>
+              Edit Profile
+            </span>
+          </a>
+        </div>
       </div>
-      <div class="btnDiv">
-        <a href="#" class="outline_btn">
-          <img src="{%  static 'images/icons/pencil.svg' %}" alt="lastseen">
-          <span>
-            Edit Profile
-          </span>
-        </a>
-      </div>
+
 
     </div>
 
@@ -199,4 +227,3 @@
 </body>
 
 </html>
-

@@ -1,0 +1,244 @@
+{% load static %}
+{% load last_seen %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+
+
+
+    <div class="dashboard_items">
+      <div class="top">
+        <a href="#" class="active">following</a>
+
+      </div>
+
+
+      <div class="products_area notification_area">
+
+        {% if following %}
+        <div class="not_empty">
+          <div class="count" style="text-align: center;padding: 20px;">
+            All
+            following
+          </div>
+
+          <style>
+            .notification_grid {
+              display: grid;
+              grid-template-columns: repeat(1, 1fr) !important;
+              gap: 20px;
+            }
+
+            /* Card Grid */
+            .card-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+              gap: 20px;
+            }
+
+            /* Card */
+            .card {
+              background: #ffffff;
+              border-radius: 10px;
+              padding: 15px;
+              text-align: center;
+              transition: transform 0.3s ease, box-shadow 0.3s ease;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+
+            .avatar img {
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+              margin-bottom: 10px;
+            }
+
+            .info h3 {
+              font-size: 18px;
+              margin-bottom: 5px;
+              color: #333;
+            }
+
+            .info p {
+              font-size: 14px;
+              color: #666;
+            }
+
+            /* Empty State */
+            .empty {
+              text-align: center;
+              font-size: 16px;
+              color: #888;
+            }
+
+            .about_bio {
+              overflow: hidden;
+              max-width: 100%;
+              text-overflow: ellipsis;
+              width: fit-content;
+              white-space: nowrap;
+            }
+
+            .sm_btn {
+              background-color: #9D977A;
+              color: #fff;
+              color: #fff !important;
+              font-size: 12px;
+              padding: 5px 20px;
+              display: inline-block;
+              border-radius: 20px;
+              margin-top: 20px;
+              font-weight: 600;
+            }
+          </style>
+          <div class="products_grid notification_grid">
+            <div class="card-grid">
+              {% for follow in following %}
+              <div class="card">
+                <a href="{% url 'UserProfileView' follow.follower.id  %}">
+                  <div class="avatar">
+                    <img src="{{ follow.follower.photo.url }}" alt="Avatar">
+                  </div>
+                  <div class="info">
+                    <h3>{{ follow.follower.user.username }}</h3>
+                    <p class="about_bio">{{ follow.follower.about|default:"No bio available." }}</p>
+                  </div>
+                  <a href="{% url 'UserProfileView' follow.follower.id  %}" class="sm_btn">Check Profile</a>
+                </a>
+              </div>
+              {% empty %}
+              <p class="empty">No following yet.</p>
+              {% endfor %}
+            </div>
+
+
+          </div>
+
+
+
+          <!-- 
+          <div class="pagination">
+            <span class="step-links">
+              {% if page_obj.has_previous %}
+              <a href="?page=1" class="first">First</a>
+              <a href="?page={{ page_obj.previous_page_number }}" class="previous"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                  <path
+                    d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z">
+                  </path>
+                </svg></a>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+              <span class="current">{{ num }}</span>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a href="?page={{ num }}" class="number">{{ num }}</a>
+              {% endif %}
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="next"><svg xmlns="http://www.w3.org/2000/svg"
+                  width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                  <path
+                    d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z">
+                  </path>
+                </svg></a>
+              <a href="?page={{ page_obj.paginator.num_pages }}" class="last">Last</a>
+              {% endif %}
+            </span>
+          </div>
+
+          <style>
+            .pagination {
+              display: flex;
+              justify-content: center;
+              margin-top: 20px;
+            }
+
+            .step-links {
+              display: flex;
+              align-items: center;
+            }
+
+            .step-links a,
+            .step-links .current {
+              margin: 0 5px;
+              padding: 8px 16px;
+              text-decoration: none;
+              color: #9D977A;
+              border: 1px solid #dee2e6;
+              border-radius: 4px;
+              transition: background-color 0.3s, color 0.3s;
+            }
+
+            .step-links a:hover {
+              background-color: #9D977A;
+              color: #fff;
+            }
+
+            .step-links .current {
+              background-color: #9D977A;
+              color: #fff;
+              font-weight: bold;
+            }
+
+            .step-links .first,
+            .step-links .previous,
+            .step-links .next,
+            .step-links .last {
+              font-weight: bold;
+            }
+
+            .step-links svg {
+              width: 18px;
+              height: 18px;
+            }
+          </style> -->
+
+        </div>
+        {% else %}
+        <div class="empty">
+          <img src="{%  static 'images/icons/user/product_upload.svg' %}" alt="location">
+          <h3>
+            Upload items to start selling
+          </h3>
+          <p>
+            Sell your used clothes effortlessly, earning cash without hidden fees.
+          </p>
+          <a href="{% url 'signup' %}" class="btn p_btn">Sell Now</a>
+
+        </div>
+        {% endif %}
+
+
+
+
+      </div>
+    </div>
+
+
+  </div>
+
+  {% include '../../components/mainfooter.html' %}
+
+</body>
+
+</html>

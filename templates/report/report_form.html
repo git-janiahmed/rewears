@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report | re-wears</title>
+  <link rel="stylesheet" href="{% static 'style/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+  {% include '../components/mainheader.html' %}
+  <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    <br>
+
+    <div class="p-4 bg-white shadow-md rounded-md mr-4 inline-block mb-4">
+      <svg width="20" height="20" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#D93C3C">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M14.456.132c-2.588 1.32-3.822.877-5.146.404C8.04.08 6.687-.404 3.975.61A15.74 15.74 0 0 0 3 1.013V12a11.9 11.9 0 0 1 1-.443c.35-.135.683-.242 1-.324 1.86-.48 3.18-.104 4.501.27 1.634.464 3.268.928 5.92-.225a.981.981 0 0 0 .579-.9V.963c0-.784-.838-1.19-1.544-.831ZM14 9.688V2.515c-.978.357-1.867.51-2.722.49-1.097-.028-2-.355-2.618-.578l-.156-.056c-.644-.229-1.094-.364-1.69-.36-.425.004-1.004.083-1.814.356v6.815a8.677 8.677 0 0 1 1.584-.174c1.325-.021 2.426.279 3.286.521l.115.033c.843.238 1.423.402 2.088.433.512.025 1.127-.032 1.927-.307ZM2 1a.999.999 0 1 0-2 0V15.5c0 .275.225.5.5.5h1c.275 0 .5-.225.5-.5V1Z">
+        </path>
+      </svg>
+    </div>
+    <h1 class="text-3xl font-bold ">Report User</h1>
+    <p class=" text-sm text-gray-600 mt-2">Please provide us with the details of the issue you faced</p>
+    <br><br>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {{ form.reported_user }}
+
+      <div class="bg-white rounded-xl shadow">
+        <div class="p-4 sm:p-7">
+          <div class="space-y-4 sm:space-y-6">
+            <!-- Reporter Email -->
+            <div class="space-y-2">
+              <label for="subject" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
+                Subject</label>
+              <input name="subject" id="subject" type="text"
+                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                placeholder="Enter subject of the issue you faced, i.e scam, fraud, unappropriate behaviour" required>
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-2">
+              <label for="description" class="inline-block text-sm font-medium text-gray-800 mt-2.5">Description</label>
+              <textarea name="description" id="description"
+                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none"
+                rows="6" placeholder="Describe the issue" required></textarea>
+            </div>
+
+            <!-- Media File -->
+            <div class="space-y-2">
+              <label for="media_file" class="inline-block text-sm font-medium text-gray-800 mt-2.5">Attach Media
+                (optional)</label>
+              <input type="file" id="media_file" name="media_file"
+                class="py-2 px-3 block w-full border-gray-200 shadow-sm rounded-lg text-sm focus:border-primary-500 focus:ring-primary-500 disabled:opacity-50 disabled:pointer-events-none">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-2.5">
+              <button type="submit"
+                class="w-full py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-primary-500 text-white hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all text-sm">
+                Submit Report
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    {{ form.errors }}
+  </div>
+
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#9D977A',
+            'primary': {
+              50: '#9D977A',
+              100: '#9D977A',
+              200: '#9D977A',
+              300: '#9D977A',
+              400: '#9D977A',
+              500: '#9D977A',
+              600: '#9D977A',
+              700: '#9D977A',
+              800: '#9D977A',
+              900: '#9D977A',
+            },
+          },
+        },
+      }
+    }
+  </script>
+  {% include '../components/mainfooter.html' %}
+</body>
+
+</html>

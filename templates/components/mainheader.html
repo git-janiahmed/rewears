@@ -1,121 +1,18 @@
 {% load static %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'hero.css' %}">
+<script src="{% static 'hero.js' %}"></script>
+
+
+
 <style>
-  .mega-menu {
-    background-color: #ffffff;
-    color: #333;
-    padding: 10px;
-  }
-
-  .main-menu {
-    display: flex;
-    justify-content: center;
-    padding: 0;
-    list-style: none;
-    margin: 0;
-  }
-
-  .main-item {
-    position: relative;
-    margin: 0 20px;
-  }
-
-  .main-item>a {
-    text-decoration: none;
-    color: #333;
-    padding: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-  }
-
-  .main-item>a:hover {
-    color: #9D977A;
-  }
-
-  .main-item>a>.icon {
-    margin-right: 8px;
-    font-size: 18px;
-    transition: transform 0.3s ease;
-  }
-
-  .main-item>a:hover>.icon {
-    transform: rotate(20deg);
-    color: #9D977A;
-  }
-
-  .sub-menu,
-  .sub-sub-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #f5f5f5;
-    padding: 10px 0;
-    border-radius: 5px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-    min-width: 220px;
-    z-index: 1000;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  .sub-sub-menu {
-    left: 100%;
-    top: 0;
-    transform: translateX(10px);
-  }
-
-  .sub-menu .sub-item,
-  .sub-sub-menu .sub-sub-item {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .sub-menu a,
-  .sub-sub-menu a {
-    padding: 8px 15px;
-    text-decoration: none;
-    color: #333;
-    display: block;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .sub-menu a:hover,
-  .sub-sub-menu a:hover {
-    background-color: #e0e0e0;
-    color: #9D977A;
-  }
-
-  .main-item:hover>.sub-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  .sub-item:hover>.sub-sub-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-  }
-
   /* Icons */
   .icon-category {
     content: "\f015";
   }
 
-  /* Example icon for categories */
   .icon-men:before {
     content: "👔";
   }
@@ -140,37 +37,443 @@
     margin-left: 8px;
   }
 
-  /* Responsive Behavior */
+  /* Mobile menu toggle button */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  .logged_icons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .logged_icons a,
+  .logged_icons>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+  }
+
+  .logged_icons a:hover,
+  .logged_icons>div:hover {
+    background-color: #f0f0f0;
+  }
+
+  .inbox_icon {
+    position: relative;
+  }
+
+  .inbox_icon .un_msg {
+    background: #1DBF73;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    border-radius: 100%;
+    padding: 3.3px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+
+  .notification-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .notification-count {
+    position: absolute;
+    top: -3px;
+    right: -4px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    padding: 7px;
+    font-size: 8px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10px;
+    height: 10px;
+  }
+
+  .notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: -100px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    display: none;
+    z-index: 1000;
+  }
+
+  .notification-dropdown.show {
+    display: block;
+  }
+
+  .notification-header {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
+    border-radius: 8px;
+
+  }
+
+  a.notification-item {
+    width: 100%;
+    height: 100%;
+    border-radius: 0px;
+    padding: 1rem !important;
+    border-bottom: 1px solid #eee !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  a.notification-item:hover {
+    background-color: #f8f9fa;
+  }
+
+  a.notification-item.unread {
+    background-color: #f0f7ff;
+  }
+
+  .notification-content {
+    flex: 1;
+  }
+
+  .notification-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .notification-message {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .notification-time {
+    color: #888;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .notification-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .notification-bell {
+    display: flex;
+  }
+
+  .notification_body {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .notification_footer {
+    width: 100%;
+    text-align: center;
+    background: #000;
+    position: absolute;
+    bottom: -38px;
+    left: 0;
+    right: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+  .notification_footer a {
+    display: inline-block !important;
+    width: 100%;
+    text-align: center;
+    height: 100%;
+    border-radius: 0px;
+    font-weight: 600;
+    color: #fff !important;
+    padding: 10px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+
+
+  .notification_footer a:hover {
+    color: #9D977A !important;
+
+
+  }
+
+  .reviews {
+    display: flex;
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .star-rating {
+    position: relative;
+    font-size: 13px;
+    display: inline-block;
+  }
+
+  .empty-stars {
+    color: #ddd;
+  }
+
+  .filled-stars,
+  .empty-stars {
+    display: flex;
+    gap: 1px;
+  }
+
+  .filled-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #FFD700;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .filled-stars i {
+    text-shadow: 0 0 1px #FFB800;
+  }
+
+  .profile-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .profile-icon {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+
+  .profile-icon img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    max-width: 40px;
+  }
+
+  .profile-icon:hover {
+    background-color: #f0f0f0;
+  }
+
+  .profile-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .profile-dropdown-content.show {
+    display: block;
+  }
+
+  .profile-dropdown-content a,
+  .profile-dropdown-content form {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+  }
+
+  .profile-dropdown-content a:hover,
+  .profile-dropdown-content form:hover {
+    background-color: #f1f1f1;
+  }
+
+  .profile-dropdown-content .logout-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+  }
+
+
+
+
+
+  /* Sidebar Menu */
+  .sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+  }
+
+  .close-btn {
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .sidebar-content a,
+  .sidebar-content form {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+  }
+
+  .sidebar-content a:hover,
+  .sidebar-content form:hover {
+    background-color: #f1f1f1;
+  }
+
+  .sidebar-content .logout-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+  }
+
+  /* Show Sidebar Menu */
+  .sidebar-menu.show {
+    left: 0;
+  }
+
+  /* Toggle Button */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+  }
+
+
+  .mbl_links {
+    display: none;
+  }
+
+
+
+  .sidebar-content .top_flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+
+  .sidebar-content .top_flex img {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+  }
+
+  /* Responsive */
   @media (max-width: 768px) {
-    .main-menu {
-      flex-direction: column;
+    .primary_header .header_top {
+      padding-top: 0px;
+    }
+
+    .primary_header .header_top .logo_div a {
+      color: #000;
+    }
+
+    .primary_header .header_top .logo_div {
+      text-align: left;
+    }
+
+    .notification-dropdown {
+      top: 128%;
+      right: 0px
+    }
+
+    .primary_header .header_top .logo_div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0px 20px;
+      margin: 0px;
+    }
+
+    .primary_header .header_top .top_links {
+      display: none;
+    }
+
+    .mbl_links {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+
+    }
+
+
+    .mbl_links svg {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
       align-items: center;
     }
 
-    .main-item {
-      width: 100%;
-      margin: 10px 0;
+    .menu-toggle {
+      display: block;
     }
 
-    .main-item>a {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .sub-menu,
-    .sub-sub-menu {
-      position: static;
-      transform: none;
-      opacity: 1;
-      visibility: visible;
-      box-shadow: none;
-      padding: 0;
-      border-radius: 0;
-    }
-
-    .sub-menu a,
-    .sub-sub-menu a {
-      padding: 10px 20px;
+    .top_links {
+      display: none;
     }
   }
 </style>
@@ -187,93 +490,390 @@
           <img src="{%  static 'images/icons/search.svg' %}" alt="">
         </button>
       </form>
-      {% if user.is_authenticated %}
-      <a class="wishlist_a" href="{% url 'wishlist' %}">
-        <img src="{%  static 'images/icons/heart.svg' %}" alt="">
-        Wishlist
-      </a>
-      {% endif %}
+
     </div>
-    <a href="{% url 'homepage' %}" class="logo_div">
-      <img src="{%  static 'images/logo.svg' %}" alt="" class="logo">
+    <div class="logo_div">
+      <a href="{% url 'homepage' %}">
+        <img src="{%  static 'images/logo.svg' %}" alt="" class="logo">
+      </a>
+      <div class="mbl_links">
+        {% if user.is_authenticated %}
 
-    </a>
+        <a class="inbox_icon" href="{% url 'chat_inbox' %}">
+          <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M18 2.35726V2.07323C18 1.00381 17.1299 0.133789 16.0606 0.133789H1.93944C0.870019 0.133789 0 1.00381 0 2.07323V2.35726V2.35934V11.6756C0 12.745 0.870019 13.615 1.93944 13.615H16.0607C17.13 13.615 18 12.745 18 11.6756V2.35934C18 2.35867 18 2.35797 18 2.35726ZM1.93944 1.18848H16.0606C16.5484 1.18848 16.9453 1.58537 16.9453 2.07323V2.07348L9.8825 6.78199C9.41239 7.09541 8.58768 7.09538 8.11764 6.78203L1.0547 2.07345V2.0732C1.0547 1.58537 1.45158 1.18848 1.93944 1.18848ZM16.0607 12.5603H1.93944C1.45158 12.5603 1.0547 12.1634 1.0547 11.6756V3.34101L7.5326 7.65957C7.94407 7.9339 8.47195 8.07101 9.00004 8.07101C9.52798 8.07101 10.0561 7.93386 10.4675 7.65957L16.9453 3.34101V11.6756C16.9453 12.1634 16.5485 12.5603 16.0607 12.5603Z"
+              fill="black" />
+          </svg>
+          <span class="un_msg" style="display: {% if unread_messages_count > 0 %}flex{% else %}none{% endif %};"></span>
+        </a>
+        <div class="notification_icon notification-wrapper">
+          <div class="notification-bell" id="notificationBell">
+
+            <svg width="20" height="19" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.6994 12.28C15.6988 12.28 15.6988 12.28 15.6988 12.28C14.8386 11.217 13.395 9.12802 13.395 7.08001C13.395 5.05248 12.0655 3.22847 10.1311 2.55713C10.1069 1.69441 9.38505 1 8.50006 1C7.61506 1 6.89259 1.69441 6.86907 2.55713C4.93461 3.2285 3.60519 5.05251 3.60519 7.08001C3.60519 9.12739 2.16219 11.217 1.30069 12.28C1.01353 12.6371 0.925412 13.1063 1.06509 13.537C1.20148 13.9568 1.53956 14.282 1.96901 14.4055C3.0506 14.7185 4.50045 14.9265 6.23118 15.0212C6.36359 16.1337 7.32994 17 8.49942 17C9.66874 17 10.635 16.1339 10.7676 15.0216C12.8817 14.906 14.2239 14.6388 15.0298 14.4054C15.4606 14.2819 15.7986 13.9568 15.9351 13.537C16.0747 13.1063 15.986 12.6365 15.6994 12.28ZM10.1036 15.0525C9.96329 15.7955 9.29758 16.36 8.49939 16.36C7.71229 16.36 7.05378 15.8109 6.90171 15.0525C7.36573 15.0711 7.89244 15.08 8.49939 15.08C8.49955 15.08 8.49971 15.08 8.49987 15.08C8.49993 15.08 8.50003 15.08 8.50003 15.08C8.50031 15.08 8.50057 15.08 8.50086 15.08C9.10985 15.08 9.63866 15.0711 10.1036 15.0525ZM15.3131 13.3424C15.2413 13.5632 15.0716 13.7264 14.8458 13.7917C14.0435 14.0238 12.6813 14.291 10.4916 14.3952C10.4746 14.3941 10.4572 14.3941 10.4391 14.3965C10.3845 14.3995 10.3286 14.4023 10.272 14.405C9.73162 14.4274 9.1428 14.44 8.50172 14.4401C8.50108 14.4401 8.50044 14.4401 8.49977 14.4401C7.85244 14.4401 7.2585 14.4272 6.71375 14.4043C6.66165 14.4019 6.61012 14.3993 6.55973 14.3965C6.54683 14.3947 6.53399 14.3947 6.52124 14.3957C4.32435 14.292 2.95796 14.0243 2.15369 13.7917C1.92851 13.7271 1.75818 13.5633 1.68705 13.3431C1.61331 13.1159 1.66028 12.8663 1.81235 12.6775C2.92772 11.2996 4.25784 9.20933 4.25784 7.08004C4.25784 5.24707 5.51094 3.60676 7.30506 3.09091C7.46168 3.04547 7.55764 2.88035 7.53412 2.72228C7.52826 2.6826 7.52105 2.64163 7.52105 2.60003C7.52105 2.07075 7.96029 1.64003 8.50003 1.64003C9.03977 1.64003 9.47836 2.07075 9.479 2.60003C9.479 2.64357 9.47183 2.68516 9.46399 2.73763C9.4405 2.89572 9.53904 3.0461 9.69503 3.09091C11.4892 3.60676 12.7422 5.24773 12.7422 7.08004C12.7422 9.20995 14.0723 11.2996 15.1877 12.6775C15.3398 12.8669 15.3868 13.1159 15.3131 13.3424Z"
+                fill="black" stroke="black" stroke-width="0.2" />
+            </svg>
+
+            <span class="notification-count"
+              style="display: {% if unread_notifications_count > 0 %}flex{% else %}none{% endif %};">
+              {{ unread_notifications_count }}
+            </span>
+          </div>
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              Notifications
+            </div>
+            <!-- You can dynamically load notifications from Django here -->
+            <div class="notification_body">
+              {% for notification in notifications %}
+              <a href="{{ notification.link  }}" data-id="{{ notification.id  }}"
+                class="notification-item {% if not notification.is_read %}unread{% endif %}">
+
+                <div class="notification-icon">🔔</div>
+                <div class="notification-content">
+                  <div class="notification-title">{{ notification.notification_type }}</div>
+                  <div class="notification-message">{{ notification.message }}</div>
+                  <div class="notification-time">{{ notification.created_at|date:"Y-m-d H:i" }}</div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+            <div class="notification_footer">
+              <a href="{% url 'notification_list' %}">View all</a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+          <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="22" height="2" rx="1" fill="#9D977A" />
+            <rect y="7" width="22" height="2" rx="1" fill="#9D977A" />
+            <rect x="9" y="14" width="13" height="2" rx="1" fill="#9D977A" />
+          </svg>
+        </div>
+        <div class="sidebar-menu" id="sidebarMenu">
+          <div class="sidebar-header">
+            <span class="close-btn" id="closeBtn">&times;</span>
+          </div>
+          <div class="sidebar-content">
+
+            <div class="top_flex">
+              {% if user.userprofile.photo %}
+              <img src="{{ user.userprofile.photo.url }}" id="userPhoto" alt="user photo">
+              {% else %}
+              <img src="{% static 'user_images/default.jpg' %}" id="userPhoto" alt="default photo">
+              {% endif %}
+              <p>
+                <strong>
+                  {{user.username}}
+                </strong>
+              </p>
+            </div>
+            <a href="{% url 'userdashboardIndex' %}">Dashboard</a>
+            <a href="{% url 'order_list' %}">Orders</a>
+            <a href="{% url 'usersettings' %}">Settings</a>
+            <a href="{% url 'usersettings' %}">Edit Profile</a>
+            <form action="{% url 'logout' %}" method="post">
+              {% csrf_token %}
+              <button style="padding: 0px;" type="submit" class="logout-btn">Log Out</button>
+            </form>
+          </div>
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}" style="font-size: 14px;
+        color: #000;
+        display: flex
+    ;
+        gap: 7px;
+        align-items: center;">
+          <img style="width: 15px;" src="{%  static 'images/icons/person.svg' %}" alt="">
+          <span>Log in</span>
+        </a>
+
+        <a href="{% url 'signup' %}" style="display: block;
+        border-radius: 25px;
+        text-transform: uppercase;
+        text-align: center;
+        padding: 5px 21px;
+        font-size: 14px;
+        color: #fff;" class="btn p_btn">Sign Up</a>
+        {% endif %}
+
+      </div>
+
+    </div>
     <div class="top_links">
+
+
       {% if user.is_authenticated %}
 
+
+      <div class="logged_icons">
+        <a class="wishlist_a" href="{% url 'wishlist' %}">
+          <svg width="17" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M13.0909 0C11.3727 0 9.87873 0.805851 9 2.15631C8.12127 0.805851 6.62727 0 4.90909 0C3.60758 0.00157648 2.35982 0.540004 1.43951 1.49717C0.519209 2.45433 0.00151577 3.75208 0 5.10571C0 7.59049 1.48909 10.1765 4.42636 12.7907C5.77231 13.9835 7.22619 15.0379 8.76764 15.9392C8.83907 15.9791 8.9189 16 9 16C9.08109 16 9.16093 15.9791 9.23236 15.9392C10.7738 15.0379 12.2277 13.9835 13.5736 12.7907C16.5109 10.1765 18 7.59049 18 5.10571C17.9985 3.75208 17.4808 2.45433 16.5605 1.49717C15.6402 0.540004 14.3924 0.00157648 13.0909 0ZM9 14.901C7.65736 14.0952 0.981818 9.84722 0.981818 5.10571C0.982901 4.02276 1.39701 2.98449 2.13329 2.21873C2.86956 1.45297 3.86785 1.02227 4.90909 1.02114C6.56836 1.02114 7.96173 1.94272 8.54591 3.42678C8.58289 3.52043 8.64581 3.60052 8.72667 3.65689C8.80752 3.71326 8.90266 3.74335 9 3.74335C9.09734 3.74335 9.19248 3.71326 9.27333 3.65689C9.35419 3.60052 9.41711 3.52043 9.45409 3.42678C10.0383 1.94272 11.4316 1.02114 13.0909 1.02114C14.1322 1.02227 15.1304 1.45297 15.8667 2.21873C16.603 2.98449 17.0171 4.02276 17.0182 5.10571C17.0182 9.84722 10.3426 14.0952 9 14.901Z"
+              fill="black" />
+          </svg>
+
+        </a>
+        <a class="inbox_icon" href="{% url 'chat_inbox' %}">
+          <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M18 2.35726V2.07323C18 1.00381 17.1299 0.133789 16.0606 0.133789H1.93944C0.870019 0.133789 0 1.00381 0 2.07323V2.35726V2.35934V11.6756C0 12.745 0.870019 13.615 1.93944 13.615H16.0607C17.13 13.615 18 12.745 18 11.6756V2.35934C18 2.35867 18 2.35797 18 2.35726ZM1.93944 1.18848H16.0606C16.5484 1.18848 16.9453 1.58537 16.9453 2.07323V2.07348L9.8825 6.78199C9.41239 7.09541 8.58768 7.09538 8.11764 6.78203L1.0547 2.07345V2.0732C1.0547 1.58537 1.45158 1.18848 1.93944 1.18848ZM16.0607 12.5603H1.93944C1.45158 12.5603 1.0547 12.1634 1.0547 11.6756V3.34101L7.5326 7.65957C7.94407 7.9339 8.47195 8.07101 9.00004 8.07101C9.52798 8.07101 10.0561 7.93386 10.4675 7.65957L16.9453 3.34101V11.6756C16.9453 12.1634 16.5485 12.5603 16.0607 12.5603Z"
+              fill="black" />
+          </svg>
+          <span class="un_msg" style="display: {% if unread_messages_count > 0 %}flex{% else %}none{% endif %};"></span>
+        </a>
+        <div class="notification_icon notification-wrapper">
+          <div class="notification-bell" id="notificationBell">
+
+            <svg width="20" height="19" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.6994 12.28C15.6988 12.28 15.6988 12.28 15.6988 12.28C14.8386 11.217 13.395 9.12802 13.395 7.08001C13.395 5.05248 12.0655 3.22847 10.1311 2.55713C10.1069 1.69441 9.38505 1 8.50006 1C7.61506 1 6.89259 1.69441 6.86907 2.55713C4.93461 3.2285 3.60519 5.05251 3.60519 7.08001C3.60519 9.12739 2.16219 11.217 1.30069 12.28C1.01353 12.6371 0.925412 13.1063 1.06509 13.537C1.20148 13.9568 1.53956 14.282 1.96901 14.4055C3.0506 14.7185 4.50045 14.9265 6.23118 15.0212C6.36359 16.1337 7.32994 17 8.49942 17C9.66874 17 10.635 16.1339 10.7676 15.0216C12.8817 14.906 14.2239 14.6388 15.0298 14.4054C15.4606 14.2819 15.7986 13.9568 15.9351 13.537C16.0747 13.1063 15.986 12.6365 15.6994 12.28ZM10.1036 15.0525C9.96329 15.7955 9.29758 16.36 8.49939 16.36C7.71229 16.36 7.05378 15.8109 6.90171 15.0525C7.36573 15.0711 7.89244 15.08 8.49939 15.08C8.49955 15.08 8.49971 15.08 8.49987 15.08C8.49993 15.08 8.50003 15.08 8.50003 15.08C8.50031 15.08 8.50057 15.08 8.50086 15.08C9.10985 15.08 9.63866 15.0711 10.1036 15.0525ZM15.3131 13.3424C15.2413 13.5632 15.0716 13.7264 14.8458 13.7917C14.0435 14.0238 12.6813 14.291 10.4916 14.3952C10.4746 14.3941 10.4572 14.3941 10.4391 14.3965C10.3845 14.3995 10.3286 14.4023 10.272 14.405C9.73162 14.4274 9.1428 14.44 8.50172 14.4401C8.50108 14.4401 8.50044 14.4401 8.49977 14.4401C7.85244 14.4401 7.2585 14.4272 6.71375 14.4043C6.66165 14.4019 6.61012 14.3993 6.55973 14.3965C6.54683 14.3947 6.53399 14.3947 6.52124 14.3957C4.32435 14.292 2.95796 14.0243 2.15369 13.7917C1.92851 13.7271 1.75818 13.5633 1.68705 13.3431C1.61331 13.1159 1.66028 12.8663 1.81235 12.6775C2.92772 11.2996 4.25784 9.20933 4.25784 7.08004C4.25784 5.24707 5.51094 3.60676 7.30506 3.09091C7.46168 3.04547 7.55764 2.88035 7.53412 2.72228C7.52826 2.6826 7.52105 2.64163 7.52105 2.60003C7.52105 2.07075 7.96029 1.64003 8.50003 1.64003C9.03977 1.64003 9.47836 2.07075 9.479 2.60003C9.479 2.64357 9.47183 2.68516 9.46399 2.73763C9.4405 2.89572 9.53904 3.0461 9.69503 3.09091C11.4892 3.60676 12.7422 5.24773 12.7422 7.08004C12.7422 9.20995 14.0723 11.2996 15.1877 12.6775C15.3398 12.8669 15.3868 13.1159 15.3131 13.3424Z"
+                fill="black" stroke="black" stroke-width="0.2" />
+            </svg>
+
+            <span class="notification-count"
+              style="display: {% if unread_notifications_count > 0 %}flex{% else %}none{% endif %};">
+              {{ unread_notifications_count }}
+            </span>
+          </div>
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-header">
+              Notifications
+            </div>
+            <!-- You can dynamically load notifications from Django here -->
+            <div class="notification_body">
+              {% for notification in notifications %}
+              <a href="{{ notification.link  }}" data-id="{{ notification.id  }}"
+                class="notification-item {% if not notification.is_read %}unread{% endif %}">
+
+                <div class="notification-icon">🔔</div>
+                <div class="notification-content">
+                  <div class="notification-title">{{ notification.notification_type }}</div>
+                  <div class="notification-message">{{ notification.message }}</div>
+                  <div class="notification-time">{{ notification.created_at|date:"Y-m-d H:i" }}</div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+            <div class="notification_footer">
+              <a href="{% url 'notification_list' %}">View all</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
       <a href="{% url 'order_list' %}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
-          <path
-            d="M216,64H176a48,48,0,0,0-96,0H40A16,16,0,0,0,24,80V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm88,168H40V80H80V96a8,8,0,0,0,16,0V80h64V96a8,8,0,0,0,16,0V80h40Z">
-          </path>
-        </svg> <span>Your Orders</span>
+        <span style="font-weight: 600;"> Orders</span>
       </a>
-      <a href="{% url 'chat_inbox' %}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
-          <path
-            d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z">
-          </path>
-        </svg> Messages
-      </a>
-      <a href="{% url 'userdashboardIndex' %}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
-          <path
-            d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z">
-          </path>
-        </svg> Account
-      </a>
-      <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button style="border: none;cursor: pointer;" type="submit" class="btn p_btn">Log Out</button>
-      </form>
+
+
+      <!-- Sidebar Menu -->
+
+      <div class="profile-dropdown">
+        <div class="profile-icon" id="profileIcon">
+
+
+          {% if user.userprofile.photo %}
+          <img src="{{ user.userprofile.photo.url }}" id="userPhoto" alt="user photo">
+          {% else %}
+          <img src="{% static 'user_images/default.jpg' %}" id="userPhoto" alt="default photo">
+          {% endif %}
+        </div>
+        <div class="profile-dropdown-content" id="profileDropdown">
+          <a href="{% url 'userdashboardIndex' %}">Dashboard</a>
+
+          <a href="{% url 'usersettings' %}">Settings</a>
+          <a href="{% url 'usersettings' %}">Edit Profile</a>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" style="padding: 0;" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </div>
+      <script>
+        const profileIcon = document.getElementById('profileIcon');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        profileIcon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          profileDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!profileDropdown.contains(e.target) && !profileIcon.contains(e.target)) {
+            profileDropdown.classList.remove('show');
+          }
+        });
+
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const closeBtn = document.getElementById('closeBtn');
+
+        menuToggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          sidebarMenu.classList.toggle('show');
+        });
+
+        closeBtn.addEventListener('click', () => {
+          sidebarMenu.classList.remove('show');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!sidebarMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+            sidebarMenu.classList.remove('show');
+          }
+        });
+      </script>
+
       {% else %}
       <a href="{% url 'login' %}">
         <img src="{%  static 'images/icons/person.svg' %}" alt="">
         <span>Log in</span>
       </a>
-      <!-- <a href="{% url 'wishlist' %}">
-        <img src="{%  static 'images/icons/heart.svg' %}" alt="">
-        Wishlist
-      </a> -->
-      <a href="{% url 'signup' %}" class="btn p_btn">Sell Now</a>
+      <a href="{% url 'signup' %}" class="btn p_btn">Sign Up</a>
       {% endif %}
 
     </div>
   </div>
-  <nav class="mega-menu">
+  <nav class="menu">
     <ul class="main-menu">
-      {% for main_category in main_categories %}
-      <li class="main-item">
-        <a href="{% url 'category_products' main_category.id %}">
-          <span
-            class="icon {% if main_category.name == 'Men' %}icon-men{% elif main_category.name == 'Women' %}icon-women{% elif main_category.name == 'Kids' %}icon-kids{% elif main_category.name == 'Beauty' %}icon-beauty{% endif %}"></span>
-          {{ main_category.name }}
-        </a>
-        {% if main_category.children.exists %}
-        <ul class="sub-menu">
-          {% for sub_category in main_category.children.all %}
-          <li class="sub-item">
-            <a href="{% url 'category_products' sub_category.id %}">
-              {{ sub_category.name }}
-              {% if sub_category.children.exists %}
-              <span class="arrow-right"></span>
-              {% endif %}
-            </a>
-            {% if sub_category.children.exists %}
-            <ul class="sub-sub-menu">
-              {% for sub_sub_category in sub_category.children.all %}
-              <li class="sub-sub-item">
-                <a href="{% url 'category_products' sub_sub_category.id %}">{{ sub_sub_category.name }}</a>
-              </li>
-              {% endfor %}
-            </ul>
-            {% endif %}
-          </li>
-          {% endfor %}
-        </ul>
-        {% endif %}
+      <li class="main-item" data-category="women" data-index="2">
+        <p>
+          WOMEN
+        </p>
       </li>
-      {% endfor %}
+      <li class="main-item" data-category="men" data-index="1">
+        <p>
+          MEN
+        </p>
+      </li>
+      <li class="main-item" data-category="kids" data-index="4">
+        <p>
+          KIDS
+        </p>
+      </li>
+      <li class="main-item" data-category="beauty" data-index="3">
+        <p>
+          BEAUTY
+        </p>
+      </li>
     </ul>
+    <div class="sub-menu">
+      <div class="subcategories" id="subcategories"></div>
+      <div class="sub-subcategories" id="sub-subcategories"></div>
+    </div>
   </nav>
 </header>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/8.3.0/pusher.min.js"
+  integrity="sha512-tXL5mrkSoP49uQf2jO0LbvzMyFgki//znmq0wYXGq94gVF6TU0QlrSbwGuPpKTeN1mIjReeqKZ4/NJPjHN1d2Q=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const notificationBells = document.querySelectorAll('.notification-bell');
+    const notificationDropdowns = document.querySelectorAll('.notification-dropdown');
+    const notificationBodies = document.querySelectorAll('.notification_body');
+    const notificationCounts = document.querySelectorAll('.notification-count');
+
+    // Toggle dropdown when clicking any bell
+    notificationBells.forEach((bell, index) => {
+      bell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        notificationDropdowns[index].classList.toggle('show');
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      notificationDropdowns.forEach((dropdown, index) => {
+        if (!dropdown.contains(e.target) && !notificationBells[index].contains(e.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+    });
+
+    // Update notification count
+    function updateNotificationCount() {
+      const unreadCountMobile = document.querySelectorAll('.mbl_links .notification-item.unread').length;
+      const unreadCountDesktop = document.querySelectorAll('.logged_icons .notification-item.unread').length;
+
+      notificationCounts.forEach((count, index) => {
+        if (index == 0) {
+          count.textContent = unreadCountMobile;
+          count.style.display = unreadCountMobile === 0 ? 'none' : 'flex';
+
+        } else if (index == 1) {
+          count.textContent = unreadCountDesktop;
+          count.style.display = unreadCountDesktop === 0 ? 'none' : 'flex';
+
+        }
+      });
+    }
+
+    // Mark notifications as read when clicked
+    function addNotificationEventListeners() {
+      const notificationItems = document.querySelectorAll('.notification-item');
+      notificationItems.forEach(item => {
+        item.addEventListener('click', function () {
+          const notificationId = this.getAttribute('data-id');
+          fetch(`/user/notifications/mark-as-read/${notificationId}/`, {
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'success') {
+                this.classList.remove('unread');
+                updateNotificationCount();
+              }
+            });
+        });
+      });
+    }
+
+    addNotificationEventListeners();
+
+    // Initialize Pusher
+    const pusher = new Pusher('03a7fe18314a890045ed', {
+      cluster: 'ap2',
+    });
+    const USER_ID = "{{ user.id }}";
+    const channel = pusher.subscribe(`notifications-${USER_ID}`);
+
+    channel.bind('new-notification', function (data) {
+      const newNotification = `
+      <a href="${data.link}" data-id="${data.id}" class="notification-item unread">
+        <div class="notification-icon">🔔</div>
+        <div class="notification-content">
+          <div class="notification-title">${data.type}</div>
+          <div class="notification-message">${data.message}</div>
+          <div class="notification-time">Just now</div>
+        </div>
+      </a>`;
+      notificationBodies.forEach(body => {
+        body.insertAdjacentHTML('afterbegin', newNotification);
+      });
+      updateNotificationCount();
+      addNotificationEventListeners();
+    });
+
+    const userChannel = pusher.subscribe(`user_${USER_ID}`);
+
+    userChannel.bind('update_unread_count', function (data) {
+      if (data.total_unread_count > 0) {
+        const unreadCountIcons = document.querySelectorAll('.un_msg');
+        unreadCountIcons.forEach(icon => {
+          icon.style.display = 'flex';
+        });
+      }
+    });
+  });
+</script>

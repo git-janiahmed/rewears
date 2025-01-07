@@ -1,5 +1,6 @@
-<!-- templates/chat_inbox.html -->
+<!-- templates/chat_detail.html -->
 {% load static %}
+{% load last_seen %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,75 +8,353 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Re - Wears | Homepage</title>
-  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
-  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+  <title> Inbox | Re - Wears</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style/user.css' %}">
+  <link rel="stylesheet" href="{% static 'style/fonts.css' %}">
+  <style>
+    .offer-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 30px 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      animation: fadeIn 0.3s ease-in-out;
+      max-width: 500px;
+      width: 100%;
+      border-radius: 10px;
+    }
 
-  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .offer-popup form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .offer-popup textarea {
+      height: 150px;
+    }
+
+    .offer-popup textarea,
+    .offer-popup input {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    .offer-popup textarea:focus,
+    .offer-popup input:focus {
+      border-color: #9D977A;
+    }
+
+    .offer-popup button {
+      padding: 10px;
+      background-color: #9D977A;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .offer-popup button:hover {
+      background-color: #0056b3;
+    }
+
+    .offer-popup-close {
+      position: absolute;
+      top: 2px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 20px;
+      transition: color 0.3s;
+      color: #9D977A;
+    }
+
+    .offer-popup-close:hover {
+      color: #ff0000;
+    }
+
+    .offer {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      animation: slideIn 0.3s ease-in-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .offer p {
+      margin: 5px 0;
+    }
+
+    .offer form {
+      display: inline;
+    }
+
+    .offer_btns {
+      display: flex;
+      flex: 1;
+      gap: 10px;
+    }
+
+    .offer_btns .btn {
+      display: inline-block;
+      color: #fff;
+      font-size: 12px;
+      padding: 5px 20px;
+      border-radius: 20px;
+      font-weight: 600 !important;
+      text-transform: capitalize;
+      transition: background-color 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn.accept {
+      background-color: #9D977A;
+      color: #fff;
+    }
+
+    .btn.accept:hover {
+      background-color: #7b6e5a;
+    }
+
+    .btn.reject {
+      background-color: transparent;
+      color: #9D977A;
+      border: 1px solid #9D977A;
+
+    }
+
+    .btn.reject:hover {
+      background-color: #8f2d3a;
+    }
+
+    .btn.withdraw {
+      background-color: #b8b7b2;
+      color: #fff;
+      width: 100%;
+    }
+
+    .btn.withdraw:hover {
+      background-color: #9a9994;
+    }
+
+    .inner img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .head_flex {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+
+      .bg_light {
+        background-color: transparent;
+      }
+
+      .inbox_section .inbox .contacts {
+        display: none;
+      }
+
+      .head_flex {
+        display: flex;
+        justify-content: space-between;
+        font-size: 15px;
+        margin: 20px;
+      }
+
+      .head_flex a {
+        color: #7b6e5a;
+        text-decoration: underline;
+      }
+
+      .no_mbl {
+        display: none;
+      }
+
+      .about_product {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        font-size: 14px;
+      }
+
+      .txt_product {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .about_product button,
+      .about_product a {
+        padding: 10px;
+      }
+
+      .inbox_section .inbox .message_area .message_content .msgs_div {
+        height: 400px;
+      }
+
+      .image-upload-label {
+        display: flex;
+      }
+
+      .inbox_section .inbox .message_area .message_content .send_msg_form #chat-message-submit svg {
+        width: 17px;
+      }
+
+      .inbox_section .inbox .message_area .message_content .send_msg_form {
+        gap: 10px !important;
+        padding-right: 15px;
+        padding-bottom: 15px;
+      }
+    }
+  </style>
 </head>
 
 <body class="user">
   {% include '../components/mainheader.html' %}
 
-
   <div class="bg_light">
-
-
-
     <div class="inbox_section">
+      <h1 class="no_mbl">Chat with Sellers / Buyers </h1>
 
-      <h1>Chat with Sellers / Buyers </h1>
-
+      <div class="head_flex">
+        <h3>Chat with Sellers / Buyers </h3>
+        <a href="{% url 'chat_inbox' %}">
+          <span>Go Back</span>
+        </a>
+      </div>
       <div class="inbox">
         <div class="contacts">
-          <div class="con_top">
-            Contacts
-          </div>
+          <div class="con_top">Contacts</div>
           <div class="contact_div">
+            {% for contact in chats %}
 
-            {% for chat in chats %}
-            <a href="{% url 'chat_detail' chat.pk %}">
-              {% for participant in chat.participants.all %}
+            <a href="{% url 'chat_detail' contact.pk %}"
+              class="{% if contact.product == chat.product %}active{% endif %}" data-chat-id="{{contact.pk}}">
+
+              {% for participant in contact.participants.all %}
               {% if participant != user %}
-              <img src="{{ chat.product.images.first.image.url }} " alt="{{ chat.product.title}}">
+              <img src="{{ contact.product.images.first.image.url }}" alt="{{ contact.product.title }}">
               <div class="txt">
-                <span class="username"> {{ participant.username }}</span>
-                <p>
-                  chat with {{ participant.username }} on {{chat.product}}
+                <p class="username">
+                  <span>
+                    {{ participant.username }}
+                  </span>
+
+                  {% if contact.unread_count %}
+                  <span class="unread-count">{{ contact.unread_count }}</span>
+                  {% endif %}
                 </p>
+                <p>chat with {{ participant.username }} on {{ contact.product }}</p>
               </div>
               {% endif %}
               {% endfor %}
             </a>
             {% empty %}
-            <li>No chats available.</li>
+            <li>No chats available.
+
+              Chat with {{ other_participant.username }}
+
+
+            </li>
             {% endfor %}
           </div>
-
         </div>
-        <div class=" message_area">
+
+        <div class="message_area">
           <div class="msg_top">
-            Chat with {{ other_participant.username }}
+
+            <a href="{% url 'UserProfileView' other_participant.id  %}" class="left">
+              <div class="profile_pic">
+                <img src="{{ other_participant.userprofile.photo.url   }}" alt="{{ other_participant.username }}">
+              </div>
+              <div class="details">
+                <div class="username">
+                  {{ other_participant.username }}
+                </div>
+                <div class="seen">
+                  Active {{ other_participant.userprofile.last_seen|time_since_last_seen }}
+                </div>
+
+              </div>
+            </a>
+            <div class="btns_div">
+              <a href="{% url 'report_create' other_participant.id  %}" class="reportbtn">
+
+                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#D93C3C">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M14.456.132c-2.588 1.32-3.822.877-5.146.404C8.04.08 6.687-.404 3.975.61A15.74 15.74 0 0 0 3 1.013V12a11.9 11.9 0 0 1 1-.443c.35-.135.683-.242 1-.324 1.86-.48 3.18-.104 4.501.27 1.634.464 3.268.928 5.92-.225a.981.981 0 0 0 .579-.9V.963c0-.784-.838-1.19-1.544-.831ZM14 9.688V2.515c-.978.357-1.867.51-2.722.49-1.097-.028-2-.355-2.618-.578l-.156-.056c-.644-.229-1.094-.364-1.69-.36-.425.004-1.004.083-1.814.356v6.815a8.677 8.677 0 0 1 1.584-.174c1.325-.021 2.426.279 3.286.521l.115.033c.843.238 1.423.402 2.088.433.512.025 1.127-.032 1.927-.307ZM2 1a.999.999 0 1 0-2 0V15.5c0 .275.225.5.5.5h1c.275 0 .5-.225.5-.5V1Z">
+                  </path>
+                </svg>
+
+                <span>
+                  Report
+                </span>
+              </a>
+
+            </div>
+
           </div>
           <div class="message_content">
-
             <div class="about_product">
               <div class="left">
                 <img src="{{ chat.product.images.first.image.url }}" alt="">
                 <div class="txt_product">
-                  <p class="title">
-                    <strong>
-                      {{chat.product.title}}
-                    </strong>
-                  </p>
-                  <p>
-                    AED {{chat.product.price}}
-                  </p>
+                  <p class="title"><strong>{{ chat.product.title }}</strong></p>
+                  {% if chat.product.status != 'active' and chat.product.status != 'draft' %}
+                  <div style="display: flex;justify-content: space-between;">
+                    <p>status : {{ chat.product.status }}</p>
+                    <p>AED {{ chat.product.price }}</p>
+                  </div>
+                  {% else %}
+
+                  <p>AED {{ chat.product.price }}</p>
+
+                  {%  endif %}
+
+
                 </div>
               </div>
+              {% if chat.product.status != 'sold' and chat.product.status != 'draft' %}
+
               <div class="right">
-                <a href="{% url 'product-detail' chat.product.id %}"> Buy Now</a>
+                <button class="btn outline-btn" id="create-offer-btn">Create Offer</button>
+                <a href="{% url 'product-detail' chat.product.id %}">Buy Now</a>
               </div>
+              {%  endif %}
+
             </div>
 
             <!-- chat_detail.html -->
@@ -85,60 +364,202 @@
                 {% if message.sender.username == user.username %}
                 <div class="me">
                   <div class="inner">
-                    <strong class="username">{{ message.sender.username }} </strong>
-                    <span class="msg">
-                      {{ message.text }}
+                    {% if message.offer %}
+                    <strong class="username">{{ message.sender.username }} Sent a Custom Offer</strong>
+                    <p class="msg">{{ message.offer.description }} </p>
+                    <p class="msg"> <strong>Price</strong> {{ message.offer.amount }} AED</p>
+                    <p class="msg"> <strong>Status</strong> {{ message.offer.status }}</p>
 
-                    </span>
-                    <div class="timestamp">
-                      {{ message.timestamp }}
+                    {% if message.offer.status == 'pending' %}
+
+                    <div class="offer_btns">
+                      <form method="post" action="{% url 'cancel_offer' message.offer.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn withdraw" style="width: 100%;"> withdraw Offer</button>
+                      </form>
                     </div>
+                    {% endif %}
+
+                    {% else %}
+                    <strong class="username">{{ message.sender.username }}</strong>
+                    <span class="msg">{{ message.text }} </span>
+                    {% if message.image %}
+                    <img src="{{ message.image.url }}" alt="Image" class="chat-image">
+                    {% endif %}
+                    <div class="timestamp">{{ message.timestamp }}</div>
+                    {% endif %}
                   </div>
                 </div>
                 {% else %}
-
                 <div class="other">
                   <div class="inner">
-                    <strong class="username">{{ message.sender.username }} </strong>
-                    <span class="msg">
-                      {{ message.text }}
+                    {% if message.offer %}
+                    <strong class="username">{{ message.sender.username }} Sent a Custom Offer</strong>
+                    <p class="msg">{{ message.offer.description }} </p>
+                    <p class="msg"> <strong>Price</strong> {{ message.offer.amount }} AED</p>
+                    <p class="msg"> <strong>Status</strong> {{ message.offer.status }}</p>
+                    {% if message.offer.status == 'pending' %}
 
-                    </span>
-                    <div class="timestamp">
-                      {{ message.timestamp }}
+                    <div class="offer_btns">
+                      <form method="post" action="{% url 'accept_offer' message.offer.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn accept"> Accept</button>
+                      </form>
+                      <button type="submit" class="btn reject">Decline</button>
+
                     </div>
+                    {% endif %}
+
+                    {% else %}
+                    <strong class="username">{{ message.sender.username }}</strong>
+                    <span class="msg">{{ message.text }}</span>
+                    {% if message.image %}
+                    <img src="{{ message.image.url }}" alt="Image" class="chat-image">
+                    {% endif %}
+                    <div class="timestamp">{{ message.timestamp }}</div>
+                    {% endif %}
+
                   </div>
                 </div>
                 {% endif %}
-
                 {% endfor %}
               </div>
-
-
             </div>
 
-
-            <form class="send_msg_form" method="post" action="{% url 'send_message' chat.id %}">
+            <form class="send_msg_form" method="post" action="{% url 'send_message' chat.id %}"
+              enctype="multipart/form-data">
               {% csrf_token %}
               <textarea id="chat-message-input" name="text" rows="2" placeholder="Write a message here"></textarea>
-              <button type="submit" id="chat-message-submit"><svg xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 256 256">
+              <label for="image-upload" class="image-upload-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                  <path
+                    d="M209.66,122.34a8,8,0,0,1,0,11.32l-82.05,82a56,56,0,0,1-79.2-79.21L147.67,35.73a40,40,0,1,1,56.61,56.55L105,193A24,24,0,1,1,71,159L154.3,74.38A8,8,0,1,1,165.7,85.6L82.39,170.31a8,8,0,1,0,11.27,11.36L192.93,81A24,24,0,1,0,159,47L59.76,147.68a40,40,0,1,0,56.53,56.62l82.06-82A8,8,0,0,1,209.66,122.34Z">
+                  </path>
+                </svg>
+              </label>
+              <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;"
+                onchange="previewImage(event)">
+              <button type="submit" id="chat-message-submit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
                   <rect width="256" height="256" fill="none" />
                   <line x1="144" y1="128" x2="80" y2="128" fill="none" stroke="currentColor" stroke-linecap="round"
                     stroke-linejoin="round" stroke-width="16" />
                   <path
                     d="M48.49,221.28A8,8,0,0,0,59.93,231l168-96.09a8,8,0,0,0,0-14l-168-95.85a8,8,0,0,0-11.44,9.67L80,128Z"
                     fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="16" /></svg></button>
+                    stroke-width="16" />
+                </svg>
+              </button>
+              <div id="image-preview" class="image-preview" style="display: none;">
+                <img id="preview-img" src="" alt="Image Preview">
+                <span id="remove-image" onclick="removeImage()">×</span>
+              </div>
             </form>
+
+            <style>
+              .image-upload-label {
+                cursor: pointer;
+              }
+
+              .image-upload-label svg {
+                width: 25px;
+                height: 25px;
+                fill: #000000;
+              }
+
+              .image-preview {
+                position: absolute;
+                margin-top: 10px;
+                width: 100px;
+                height: 100px;
+                right: 20px;
+                top: -118px;
+              }
+
+              .image-preview img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+
+                border-radius: 5px;
+              }
+
+              .image-preview span {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: rgba(0, 0, 0, 0.5);
+                color: white;
+                border-radius: 50%;
+                cursor: pointer;
+                padding: 2px 5px;
+              }
+
+              .chat-image {
+                max-width: 200px;
+                border-radius: 5px;
+                margin-top: 10px;
+              }
+
+              .download-icon {
+                cursor: pointer;
+                margin-left: 10px;
+              }
+            </style>
+
+            <script>
+              function previewImage(event) {
+                const preview = document.getElementById('image-preview');
+                const previewImg = document.getElementById('preview-img');
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function () {
+                  previewImg.src = reader.result;
+                  preview.style.display = 'block';
+                };
+
+                if (file) {
+                  reader.readAsDataURL(file);
+                }
+              }
+
+              function removeImage() {
+                const preview = document.getElementById('image-preview');
+                const previewImg = document.getElementById('preview-img');
+                const imageUpload = document.getElementById('image-upload');
+
+                previewImg.src = '';
+                preview.style.display = 'none';
+                imageUpload.value = '';
+              }
+            </script>
+
+            {% for offer in offers %}
+            <div class="offer" style="display: none;">
+              <p><strong>{{ offer.sender.username }}</strong> offered AED {{ offer.amount }}</p>
+              <p>{{ offer.description }}</p>
+              <p>{{ offer.created_at }}</p>
+              {% if offer.status == 'pending' %}
+              <form method="post" action="{% url 'accept_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit">Accept Offer</button>
+              </form>
+              {% elif offer.status == 'accepted' %}
+              <p>Offer Accepted</p>
+              {% elif offer.status == 'rejected' %}
+              <p>Offer Rejected</p>
+              {% elif offer.status == 'expired' %}
+              <p>Offer Expired</p>
+              {% elif offer.status == 'cancelled' %}
+              <p>Offer Cancelled</p>
+              {% endif %}
+            </div>
+            {% endfor %}
           </div>
         </div>
       </div>
-
     </div>
-  </div>
-
-
   </div>
 
   {% include '../components/mainfooter.html' %}
@@ -152,7 +573,127 @@
     channel.bind('new_message', function (data) {
       const message = data.message;
       const sender = data.sender;
-      document.querySelector('#chat-log').innerHTML += `<p><strong>${sender}</strong>: ${message}</p>`;
+      const time = data.time;
+      const imageUrl = data.image;
+
+      if (sender == "{{ other_participant.username }}") {
+        document.querySelector('#chat-log').innerHTML += `
+        <div class="other">
+          <div class="inner">
+            <strong class="username">${sender}</strong>
+            <span class="msg">${message}</span>
+            ${imageUrl ? `<img src="${imageUrl}" alt="Image" class="chat-image">` : ''}
+            <div class="timestamp">${time}</div>
+          </div>
+        </div>`;
+      } else {
+        document.querySelector('#chat-log').innerHTML += `
+        <div class="me">
+          <div class="inner">
+            <strong class="username">${sender}</strong>
+            <span class="msg">${message}</span>
+            ${imageUrl ? `<img src="${imageUrl}" alt="Image" class="chat-image">` : ''}
+            <div class="timestamp">${time}</div>
+          </div>
+        </div>`;
+      }
+    });
+
+    channel.bind('new_offer', function (data) {
+      const description = data.description;
+      const amount = data.amount;
+      const sender = data.sender;
+      const time = data.time;
+      const offerId = data.offer_id;
+
+      if (sender == "{{ other_participant.username }}") {
+        document.querySelector('#chat-log').innerHTML += `
+        <div class="other">
+        <div class="inner">
+             <strong class="username">${sender} Sent a Custom Offer</strong>
+                    <p class="msg">${description} </p>
+                    <p class="msg"> <strong>Price</strong> ${amount} AED</p>                   
+             <div class="offer_btns">
+                      <form method="post" action="/user/offer/${offerId}/accept/">
+                        {% csrf_token %}
+                        <button type="submit" class="btn accept"> Accept</button>
+                      </form>
+                      <button type="submit" class="btn reject">Decline</button>
+
+                    </div>
+          </div>
+        </div>`;
+      } else {
+        document.querySelector('#chat-log').innerHTML += `
+        <div class="me">
+            <div class="inner">
+             <strong class="username">${sender} Sent a Custom Offer</strong>
+                    <p class="msg">${description} </p>
+                    <p class="msg"> <strong>Price</strong> ${amount} AED</p>                   
+            <div class="offer_btns">
+                      <form method="post" action="/user/offer/${offerId}/cancel/">
+                        {% csrf_token %}
+                        <button type="submit" class="btn withdraw" style="width: 100%;"> withdraw Offer</button>
+                      </form>
+            </div>
+          </div>
+        </div>`;
+      }
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var chatLog = document.querySelector('.msgs_div');
+      chatLog.scrollTop = chatLog.scrollHeight;
+    });
+
+    // Show offer creation popup
+    document.getElementById('create-offer-btn').addEventListener('click', function () {
+      const offerForm = `
+      <div class="offer-popup">
+      <h3 class="offer_heading">Create a Custom offer</h3>
+      <br> 
+      <span class="offer-popup-close" onclick="this.parentElement.remove()">×</span>
+        <form method="post" action="{% url 'create_offer' chat.id %}">
+          {% csrf_token %}
+          <textarea name="description" rows="2" placeholder="Offer description"></textarea>
+          <input type="number" name="amount" placeholder="Offer amount">
+          <button type="submit">Send Offer</button>
+        </form>
+      </div>`;
+      document.body.insertAdjacentHTML('beforeend', offerForm);
+    });
+  </script>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const pusher = new Pusher('03a7fe18314a890045ed', {
+        cluster: 'ap2',
+        encrypted: true
+      });
+
+      const userChannel = pusher.subscribe(`user_{{ user.id }}`);
+
+      userChannel.bind('update_unread_count', function (data) {
+
+        const chatElement = document.querySelector(`[data-chat-id="${data.chat_id}"]`);
+        if (chatElement) {
+
+          const unreadCountElement = chatElement.querySelector('.unread-count');
+          if (unreadCountElement) {
+
+            unreadCountElement.textContent = data.unread_count;
+            unreadCountElement.style.display = data.unread_count > 0 ? 'flex' : 'none';
+          } else {
+            const newUnreadCountElement = document.createElement('span');
+            newUnreadCountElement.classList.add('unread-count');
+            newUnreadCountElement.textContent = data.unread_count;
+            chatElement.querySelector(".username").appendChild(newUnreadCountElement);
+
+          }
+        }
+      });
     });
   </script>
 </body>

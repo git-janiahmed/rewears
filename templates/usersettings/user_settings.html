@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Settings</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+    <div class="settings_dashboard">
+      <div class="settings_menu">
+        <h3>
+          Settings
+        </h3>
+        <div class="settings_links">
+          <a href="{% url 'userprofile' %}">Profile details</a>
+          <a href="{% url 'usersettings' %}" class="active">Account settings</a>
+          <a href="{% url 'notification_list' %}">Notifications</a>
+        </div>
+      </div>
+      <div class="settings_content">
+        <form method="post" enctype="multipart/form-data" class="profile_settings">
+          {% csrf_token %}
+
+          <div class="inner">
+            <div class="shadow_div email">
+              <div class="lt">
+                <p><strong>Profile Settings</strong></p>
+                <p>
+                  <small>{{ request.user.email }}</small>
+                </p>
+              </div>
+            </div>
+
+            <div class="shadow_div personal">
+              <div class="input_div">
+                <label for="fname">Full Name</label>
+                <input type="text" id="fname" value="{{ request.user.get_full_name }}" disabled>
+              </div>
+              <div class="input_div">
+                {{ form.gender.label_tag }}
+                {{ form.gender }}
+
+              </div>
+              <!-- for birthday -->
+              <div class="input_div brday">
+                {{ form.birthday.label_tag }}
+                {{ form.birthday }}
+              </div>
+            </div>
+
+            <div class="shadow_div ch_pas">
+              <div class="lt">
+                <p><strong>Change Password</strong></p>
+              </div>
+              <a href="{% url 'password_change' %}" class="btn outline_btn">Change</a>
+            </div>
+
+            <a style="color: #000;" href="{% url 'account_delete' %}" class="shadow_div ch_pas">
+              <div class="lt">
+                <p><strong>Delete my account</strong></p>
+              </div>
+              <div>></div>
+            </a>
+
+            <div class="rt_txt">
+              <div class="rt_btn">
+                <button class="btn p_btn" type="submit">Save</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

@@ -1,4 +1,3 @@
-<!-- templates/chat_inbox.html -->
 {% load static %}
 
 <!DOCTYPE html>
@@ -10,39 +9,44 @@
   <title>Re - Wears | Homepage</title>
   <link rel="stylesheet" href="{%  static 'style/style.css' %}">
   <link rel="stylesheet" href="{%  static 'style/user.css' %}">
-
   <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+  <style>
+    .inboxed_area {
+      display: none;
+    }
+  </style>
 </head>
 
 <body class="user">
   {% include '../components/mainheader.html' %}
 
-
   <div class="bg_light">
-
-
-
     <div class="inbox_section">
-
       <h1>Chat with Sellers / Buyers </h1>
-
       <div class="inbox">
         <div class="contacts">
-          <div class="con_top">
-            Contacts
-          </div>
+          <div class="con_top">Contacts</div>
           <div class="contact_div">
-
             {% for chat in chats %}
-            <a href="{% url 'chat_detail' chat.pk %}">
+            <a href="{% url 'chat_detail' chat.pk %}" data-chat-id="{{chat.pk}}">
               {% for participant in chat.participants.all %}
               {% if participant != user %}
               <img src="{{ chat.product.images.first.image.url }} " alt="{{ chat.product.title}}">
               <div class="txt">
-                <span class="username"> {{ participant.username }}</span>
+                <p class="username">
+                  <span>
+                    {{ participant.username }}
+                  </span>
+
+                  {% if chat.unread_count %}
+                  <span class="unread-count">{{ chat.unread_count }}</span>
+                  {% endif %}
+                </p>
                 <p>
                   chat with {{ participant.username }} on {{chat.product}}
                 </p>
+
+
               </div>
               {% endif %}
               {% endfor %}
@@ -51,12 +55,9 @@
             <li>No chats available.</li>
             {% endfor %}
           </div>
-
         </div>
-        <div class=" message_area">
-          <div class="msg_top">
-            Inbox
-          </div>
+        <div class="message_area inboxed_area">
+          <div class="msg_top">Inbox</div>
           <div class="message_content">
             <div class="empty">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
@@ -72,14 +73,39 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
-
-  </div>
-
   {% include '../components/mainfooter.html' %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const pusher = new Pusher('03a7fe18314a890045ed', {
+        cluster: 'ap2',
+        encrypted: true
+      });
+
+      const userChannel = pusher.subscribe(`user_{{ user.id }}`);
+
+      userChannel.bind('update_unread_count', function (data) {
+
+        const chatElement = document.querySelector(`[data-chat-id="${data.chat_id}"]`);
+        if (chatElement) {
+
+          const unreadCountElement = chatElement.querySelector('.unread-count');
+          if (unreadCountElement) {
+            unreadCountElement.textContent = data.unread_count;
+            unreadCountElement.style.display = data.unread_count > 0 ? 'flex' : 'none';
+          } else {
+            const newUnreadCountElement = document.createElement('span');
+            newUnreadCountElement.classList.add('unread-count');
+            newUnreadCountElement.textContent = data.unread_count;
+            chatElement.querySelector(".username").appendChild(newUnreadCountElement);
+
+          }
+        }
+      });
+    });
+  </script>
 
 </body>
 

@@ -1,0 +1,173 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+    <div class="settings_dashboard">
+      <div class="settings_menu">
+        <h3>
+          Settings
+        </h3>
+        <div class="settings_links">
+          <a href="{% url 'userprofile' %}">Profile details</a>
+          <a href="{% url 'usersettings' %}" class="active">Account settings</a>
+          <a href="#">Notifications</a>
+        </div>
+      </div>
+      <div class="settings_content">
+        <form method="post" enctype="multipart/form-data" class="profile_details">
+          {% csrf_token %}
+
+          <div class="inner">
+            <div class="det">
+
+              <div class="abt">
+
+                <p>
+                  <span style="font-size: 10px;color: #797979;">
+                    Delete my account
+                  </span>
+                  <br>
+                  <strong>
+                    Help us improve
+                  </strong>
+                </p>
+                <textarea name="feedback" id="feedback"
+                  placeholder="Tell us why you’re closing your account"></textarea>
+              </div>
+            </div>
+
+            <style>
+              /* The container */
+              .container {
+                display: block;
+                position: relative;
+                padding-left: 35px;
+                margin-bottom: 12px;
+                cursor: pointer;
+                font-size: 22px;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+              }
+
+              /* Hide the browser's default checkbox */
+              .container input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+              }
+
+              /* Create a custom checkbox */
+              .checkmark {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 25px;
+                width: 25px;
+                background-color: #eee;
+
+                border-radius: 4px;
+                border: 1px solid #DCDCDC;
+              }
+
+              /* On mouse-over, add a grey background color */
+              .container:hover input~.checkmark {
+                background-color: #ccc;
+              }
+
+              /* When the checkbox is checked, add a blue background */
+              .container input:checked~.checkmark {
+                background-color: #D04555;
+
+                border-radius: 4px;
+                border: 1px solid #D04555;
+              }
+
+              /* Create the checkmark/indicator (hidden when not checked) */
+              .checkmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+              }
+
+              /* Show the checkmark when checked */
+              .container input:checked~.checkmark:after {
+                display: block;
+              }
+
+              /* Style the checkmark/indicator */
+              .container .checkmark:after {
+                left: 9px;
+                top: 5px;
+                width: 5px;
+                height: 10px;
+                border: solid white;
+                border-width: 0 3px 3px 0;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+              }
+            </style>
+            <div class="location" style="padding: 30px 20px;">
+              <p>
+                <strong>
+                  I confirm that all my orders are completed
+                </strong>
+              </p>
+
+              <div class="location_input">
+                <label class="container">
+                  <input type="checkbox" name="confirmation" class="form-check-input" required id="id_confirmation">
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+            </div>
+            <div class="description">
+
+              <p>
+                <small>
+                  If you delete your account, it will be deactivated immediately. Deactivated accounts are only visible
+                  to re-wears team before they are permanently deleted. The deletion takes place within the time frames
+                  indicated in re-wears’s Privacy Policy.
+                </small>
+              </p>
+            </div>
+
+
+            <div class="rt_txt">
+              <div class="rt_btn">
+                <button class="btn dell_btn" type="submit">DELETE ACCOUNT</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

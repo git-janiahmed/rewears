@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.urls import reverse_lazy
-from userarea.models import Category, Product, Brand, Color, Size
+from userarea.models import Category, Product, Brand, Wishlist, Color, Size
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from orders.models import Review
@@ -13,9 +13,9 @@ class HomeIndexView(TemplateView):
     template_name = "pages_front/index.html"
 
 
-class WishListView(LoginRequiredMixin, TemplateView):
-    login_url = "/login/"
-    template_name = "pages_front/wishlist.html"
+# class WishListView(LoginRequiredMixin, TemplateView):
+#     login_url = "/login/"
+#     template_name = "pages_front/wishlist.html"
 
 
 class AboutView(TemplateView):
@@ -37,7 +37,7 @@ class CategoryProductsView(ListView):
     model = Product
     template_name = "pages_front/category_products.html"
     context_object_name = "products"
-    paginate_by = 12  # Number of products per page
+    paginate_by = 20  # Number of products per page
 
     def get_queryset(self):
         category_id = self.kwargs["category_id"]
@@ -54,16 +54,27 @@ class CategoryProductsView(ListView):
         )
 
         # Apply filters if they are in the request
-        brand = self.request.GET.get("brand")
-        size = self.request.GET.get("size")
-        color = self.request.GET.get("color")
+        brands = self.request.GET.getlist("brand")
+        sizes = self.request.GET.getlist("size")
+        colors = self.request.GET.getlist("color")
 
-        if brand:
-            queryset = queryset.filter(brand__id=brand)
-        if size:
-            queryset = queryset.filter(size__id=size)
-        if color:
-            queryset = queryset.filter(colors__id=color)
+        if brands:
+            queryset = queryset.filter(brand__id__in=brands)
+        if sizes:
+            queryset = queryset.filter(size__id__in=sizes)
+        if colors:
+            queryset = queryset.filter(colors__id__in=colors)
+
+        # Apply sorting if it is in the request
+        sort_by = self.request.GET.get("sort")
+        if sort_by == "newest":
+            queryset = queryset.order_by("-upload_time")
+        elif sort_by == "oldest":
+            queryset = queryset.order_by("upload_time")
+        elif sort_by == "increasing_price":
+            queryset = queryset.order_by("price")
+        elif sort_by == "decreasing_price":
+            queryset = queryset.order_by("-price")
 
         return queryset
 
@@ -77,12 +88,27 @@ class CategoryProductsView(ListView):
             Q(id=category_id) | Q(parent=category_id)
         )
 
+        if self.request.user.is_authenticated:
+            user_wishlist = Wishlist.objects.filter(user=self.request.user).values_list(
+                "product_id", flat=True
+            )
+            context["user_wishlist"] = list(user_wishlist)
+
         context["category"] = category
         context["brands"] = Brand.objects.filter(category__in=child_categories)
         context["sizes"] = Size.objects.filter(category__in=child_categories)
         context["colors"] = (
             Color.objects.all()
         )  # Assuming colors are not category-specific
+
+        # Add selected filters to the context
+        context["selected_brands"] = self.request.GET.getlist("brand")
+        context["selected_sizes"] = self.request.GET.getlist("size")
+        context["selected_colors"] = self.request.GET.getlist("color")
+
+        # Add sorting to the context
+        context["sort_by"] = self.request.GET.get("sort", "")
+
         return context
 
 
@@ -94,6 +120,7 @@ class ProductSearchView(ListView):
     model = Product
     template_name = "pages/search_results.html"
     context_object_name = "products"
+    paginate_by = 1  # Number of products per page
 
     def get_queryset(self):
         query = self.request.GET.get("q")  # Get the search term from the input field
@@ -134,6 +161,10 @@ class PublicProfileView(DetailView):
         return context
 
 
+from accounts.models import UserProfile
+from django.db.models import Avg, Count
+
+
 class PublicReviewListView(ListView):
     model = Review
     template_name = "pages/public_reviews.html"  # Your template file
@@ -142,12 +173,20 @@ class PublicReviewListView(ListView):
 
     def get_queryset(self):
         # Get the user by username passed in the URL
-        self.user_profile = get_object_or_404(User, username=self.kwargs["username"])
-        # Filter reviews for the specific user
-        return Review.objects.filter(seller=self.user_profile)
+        profile_user = get_object_or_404(
+            UserProfile, user__username=self.kwargs["username"]
+        )
+        return Review.objects.filter(seller=profile_user).select_related("buyer")
 
     def get_context_data(self, **kwargs):
         # Add additional context to be used in the template
         context = super().get_context_data(**kwargs)
-        context["user_profile"] = self.user_profile
+        profile_user = get_object_or_404(
+            UserProfile, user__username=self.kwargs["username"]
+        )
+        reviews = Review.objects.filter(seller=profile_user)
+        context["reviews_count"] = reviews.count()
+        context["average_rating"] = reviews.aggregate(Avg("rating"))["rating__avg"]
+
+        context["profile_user"] = profile_user
         return context

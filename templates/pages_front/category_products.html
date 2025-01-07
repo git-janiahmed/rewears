@@ -9,6 +9,8 @@
   <title>Re - Wears | Homepage</title>
   <link rel="stylesheet" href="{%  static 'style/style.css' %}">
   <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+
   <style>
     .filters {
       margin-bottom: 20px;
@@ -90,6 +92,17 @@
       background-color: #007bff;
       color: #fff;
     }
+
+    .bg_primary {
+      background-color: #9D977A;
+      color: #fff;
+    }
+
+    .colorSelected {
+      outline: 2px solid black;
+      outline-offset: 2px;
+
+    }
   </style>
 </head>
 
@@ -97,85 +110,509 @@
   {% include '../components/mainheader.html' %}
 
 
-  <h1>{{ category.name }} Products</h1>
 
-  <!-- Filters -->
-  <div class="filters">
-    <form method="get">
-      <select name="brand">
-        <option value="">All Brands</option>
-        {% for brand in brands %}
-        <option value="{{ brand.id }}" {% if request.GET.brand == brand.id|stringformat:"s" %}selected{% endif %}>
-          {{ brand.name }}</option>
-        {% endfor %}
-      </select>
-      <select name="size">
-        <option value="">All Sizes</option>
-        {% for size in sizes %}
-        <option value="{{ size.id }}" {% if request.GET.size == size.id|stringformat:"s" %}selected{% endif %}>
-          {{ size.name }}</option>
-        {% endfor %}
-      </select>
-      <select name="color">
-        <option value="">All Colors</option>
-        {% for color in colors %}
-        <option value="{{ color.id }}" {% if request.GET.color == color.id|stringformat:"s" %}selected{% endif %}>
-          {{ color.name }}</option>
-        {% endfor %}
-      </select>
-      <button type="submit">Filter</button>
-    </form>
-  </div>
 
-  <!-- Products List -->
-  <div class="products-container">
-    {% for product in products %}
-    <a href="{% url 'product-detail' product.id %}" class="product-card">
-      {% if product.images.exists %}
-      <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" class="product-image">
-      {% else %}
-      <img src="/static/default-image.jpg" alt="{{ product.title }}" class="product-image">
-      <!-- Default image if no image is available -->
-      {% endif %}
-      <div class="product-info">
-        <h2 class="product-name">{{ product.title }}</h2>
-        <p class="product-price">${{ product.price }}</p>
+
+
+
+
+
+
+  <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-12">
+    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+      <!-- Heading & Filters -->
+      <div class="mb-4 items-end justify-between space-y-4 sm:flex sm:space-y-0 md:mb-8">
+        <div>
+          <nav style="margin-bottom: 50px;" class="flex" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+              <li class="inline-flex items-center">
+                <a href="#"
+                  class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white">
+                  <svg class="me-2.5 h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path
+                      d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                  </svg>
+                  Home
+                </a>
+              </li>
+
+              {% if category.parent.parent %}
+              <li>
+                <div class="flex items-center">
+                  <svg class="h-5 w-5 text-gray-400 rtl:rotate-180" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m9 5 7 7-7 7" />
+                  </svg>
+                  <a href="{% url 'category_products' category.parent.parent.id %}"
+                    class="ms-1 text-sm font-medium text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white md:ms-2">{{ category.parent.parent.name }}</a>
+                </div>
+              </li>
+              {% endif %}
+              {% if category.parent  %}
+              <li>
+                <div class="flex items-center">
+                  <svg class="h-5 w-5 text-gray-400 rtl:rotate-180" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m9 5 7 7-7 7" />
+                  </svg>
+                  <a href="{% url 'category_products' category.parent.id %}"
+                    class="ms-1 text-sm font-medium text-gray-700 hover:text-primary-600 dark:text-gray-400 dark:hover:text-white md:ms-2">{{ category.parent.name }}</a>
+                </div>
+              </li>
+              {% endif %}
+              {% if category  %}
+              <li aria-current="page">
+                <div class="flex items-center">
+                  <svg class="h-5 w-5 text-gray-400 rtl:rotate-180" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m9 5 7 7-7 7" />
+                  </svg>
+                  <span
+                    class="ms-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ms-2">{{ category.name }}</span>
+                </div>
+              </li>
+              {% endif %}
+
+
+            </ol>
+          </nav>
+          <h2 class="mt-3 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">{{ category.name }}</h2>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button data-modal-toggle="filterModal" data-modal-target="filterModal" type="button"
+            class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto">
+            <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z" />
+            </svg>
+            Filters
+            <svg class="-me-0.5 ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 9-7 7-7-7" />
+            </svg>
+          </button>
+          <button id="sortDropdownButton1" data-dropdown-toggle="dropdownSort1" type="button"
+            class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto">
+            <svg class="-ms-0.5 me-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 4v16M7 4l3 3M7 4 4 7m9-3h6l-6 6h6m-6.5 10 3.5-7 3.5 7M14 18h4" />
+            </svg>
+            Sort
+            <svg class="-me-0.5 ms-2 h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 9-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="dropdownSort1"
+            class="z-50 hidden w-40 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+            data-popper-placement="bottom">
+            <ul class="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
+              aria-labelledby="sortDropdownButton1">
+              <li>
+                <a href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}sort=newest"
+                  class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white {% if sort_by == 'newest' %}bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-white{% endif %}">
+                  Newest
+                </a>
+              </li>
+              <li>
+                <a href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}sort=oldest"
+                  class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white {% if sort_by == 'oldest' %}bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-white{% endif %}">
+                  Oldest
+                </a>
+              </li>
+              <li>
+                <a href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}sort=increasing_price"
+                  class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white {% if sort_by == 'increasing_price' %}bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-white{% endif %}">
+                  Increasing price
+                </a>
+              </li>
+              <li>
+                <a href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}sort=decreasing_price"
+                  class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white {% if sort_by == 'decreasing_price' %}bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-white{% endif %}">
+                  Decreasing price
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </a>
-    {% empty %}
-    <p>No products found in this category.</p>
-    {% endfor %}
-  </div>
+      <div class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-4 xl:grid-cols-4">
 
-  <!-- Pagination -->
-  <div class="pagination">
-    {% if products.has_previous %}
-    <a
-      href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}page={{ products.previous_page_number }}">Previous</a>
-    {% else %}
-    <span>Previous</span>
-    {% endif %}
+        {% for product in products %}
 
-    {% for page_num in products.paginator.page_range %}
-    {% if products.number == page_num %}
-    <span class="current">{{ page_num }}</span>
-    {% else %}
-    <a
-      href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
-    {% endif %}
-    {% endfor %}
+        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+          <div class="h-56 w-full">
+            <a href="{% url 'product-detail' product.id %}">
 
-    {% if products.has_next %}
-    <a
-      href="?{% if request.GET.brand %}brand={{ request.GET.brand }}&{% endif %}{% if request.GET.size %}size={{ request.GET.size }}&{% endif %}{% if request.GET.color %}color={{ request.GET.color }}&{% endif %}page={{ products.next_page_number }}">Next</a>
-    {% else %}
-    <span>Next</span>
-    {% endif %}
-  </div>
+              {% if product.images.exists %}
+              <img class="mx-auto h-full dark:hidden" src="{{ product.images.first.image.url }}"
+                alt="{{ product.title }}" />
+              <img class="mx-auto hidden h-full dark:block" src="{{ product.images.first.image.url }}"
+                alt="{{ product.title }}" />
+
+              {% else %}
+
+              <img class="mx-auto h-full dark:hidden" src="/static/default-image.jpg" alt="{{ product.title }}" />
+              <img class="mx-auto hidden h-full dark:block" src="/static/default-image.jpg" alt="{{ product.title }}" />
+              {% endif %}
+
+
+            </a>
+          </div>
+          <div class="pt-6">
+            <div class="mb-4 flex items-center justify-between gap-4">
+              <span
+                class="bg_primary me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
+                {{ product.upload_time|date:"F j, Y" }} </span>
+
+
+              {% if user.is_authenticated %}
+              <div class="flex items-center justify-end gap-1">
+
+                <style>
+                  .heart.filled {
+                    color: #B73D4B;
+                    fill: #B73D4B;
+                    stroke: none;
+                  }
+                </style>
+
+                <button type="button" data-product-id="{{ product.id }}"
+                  class="wishlist-btn rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                  <span class="sr-only"> Add to Wishlist </span>
+                  <svg class="h-5 w-5 heart {% if product.id in user_wishlist %}filled{% endif %}" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z" />
+                  </svg>
+                </button>
+                <div id="tooltip-add-to-favorites" role="tooltip"
+                  class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+                  data-popper-placement="top">
+                  Add to Wishlist
+                  <div class="tooltip-arrow" data-popper-arrow=""></div>
+                </div>
+              </div>
+              {%endif%}
+            </div>
+
+            <a href="{% url 'product-detail' product.id %}"
+              class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{{ product.title }}</a>
+
+            <!-- <div class="mt-2 flex items-center gap-2">
+              <div class="flex items-center">
+                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
+                </svg>
+
+                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
+                </svg>
+
+                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
+                </svg>
+
+                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
+                </svg>
+
+                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M13.8 4.2a2 2 0 0 0-3.6 0L8.4 8.4l-4.6.3a2 2 0 0 0-1.1 3.5l3.5 3-1 4.4c-.5 1.7 1.4 3 2.9 2.1l3.9-2.3 3.9 2.3c1.5 1 3.4-.4 3-2.1l-1-4.4 3.4-3a2 2 0 0 0-1.1-3.5l-4.6-.3-1.8-4.2Z" />
+                </svg>
+              </div>
+
+              <p class="text-sm font-medium text-gray-900 dark:text-white">5.0</p>
+              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>
+            </div> -->
+
+            <ul class="mt-2 flex items-center gap-4">
+              <li class="flex items-center gap-2">
+                <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+                </svg>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ product.user }}</p>
+              </li>
+
+
+            </ul>
+
+            <div class="mt-4 flex items-center justify-between gap-4">
+              <p class="text-xl font-medium leading-tight text-gray-900 dark:text-white">AED
+                <span>{{ product.price }}</span></p>
+
+              <a href="{% url 'product-detail' product.id %}" type="button"
+                class="bg_primary inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                <svg class="-ms-2 me-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                  height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6" />
+                </svg>
+                Buy Now
+              </a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p>No products found in this category.</p>
+        {% endfor %}
+      </div>
+      {% if page_obj.paginator.num_pages > 1 %}
+
+      <div class="w-full text-center mt-10">
+        <div class="pagination">
+          <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1" class="first">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="previous"><svg xmlns="http://www.w3.org/2000/svg"
+                width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                <path
+                  d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z">
+                </path>
+              </svg></a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span class="current">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}" class="number">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="next"><svg xmlns="http://www.w3.org/2000/svg"
+                width="32" height="32" fill="#000000" viewBox="0 0 256 256">
+                <path
+                  d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z">
+                </path>
+              </svg></a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="last">Last</a>
+            {% endif %}
+          </span>
+        </div>
+
+        <style>
+          .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+          }
+
+          .step-links {
+            display: flex;
+            align-items: center;
+          }
+
+          .step-links a,
+          .step-links .current {
+            margin: 0 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #9D977A;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+          }
+
+          .step-links a:hover {
+            background-color: #9D977A;
+            color: #fff;
+          }
+
+          .step-links .current {
+            background-color: #9D977A;
+            color: #fff;
+            font-weight: bold;
+          }
+
+          .step-links .first,
+          .step-links .previous,
+          .step-links .next,
+          .step-links .last {
+            font-weight: bold;
+          }
+
+          .step-links svg {
+            width: 18px;
+            height: 18px;
+          }
+        </style>
+      </div>
+
+      {% endif %}
+    </div>
+    <!-- Filter modal -->
+    <form action="#" method="get" id="filterModal" tabindex="-1" aria-hidden="true"
+      class="fixed left-0 right-0 top-0 z-50 hidden h-modal w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0 md:h-full">
+      <div class="relative h-full w-full max-w-xl md:h-auto">
+        <!-- Modal content -->
+        <div class="relative rounded-lg bg-white shadow dark:bg-gray-800 p-2">
+          <!-- Modal header -->
+          <div class="flex items-start justify-between rounded-t p-4 md:p-5">
+            <h3 class="text-lg font-normal text-gray-500 dark:text-gray-400">Filters</h3>
+            <button type="button"
+              class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-toggle="filterModal">
+              <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M6 18 17.94 6M18 18 6.06 6" />
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div class="px-4 md:px-5 h-96 overflow-y-auto">
+            <div class="mb-4">
+              <form method="get">
+                <div class="mb-4">
+                  <label for="brand" class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Brand</label>
+                  <div class="grid grid-cols-4 ">
+                    {% for brand in brands %}
+                    <div class="flex items-center ">
+                      <input type="checkbox" name="brand" value="{{ brand.id }}" id="brand-{{ brand.id }}"
+                        class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                        {% if brand.id|stringformat:"s" in selected_brands %}checked{% endif %}>
+                      <label for="brand-{{ brand.id }}"
+                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        {{ brand.name }}
+                      </label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <label for="size" class="block text-sm font-medium text-gray-900 dark:text-white mb-3">Size</label>
+                  <div class="grid grid-cols-7 ">
+                    {% for size in sizes %}
+                    <div class="flex items-center mb-2">
+                      <input type="checkbox" name="size" value="{{ size.id }}" id="size-{{ size.id }}"
+                        class="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                        {% if size.id|stringformat:"s" in selected_sizes %}checked{% endif %}>
+                      <label for="size-{{ size.id }}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                        {{ size.name }}
+                      </label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <label for="color" class="block text-sm font-medium text-gray-900 dark:text-white mb-3">Color</label>
+                  <div class="grid grid-cols-4 ">
+                    {% for color in colors %}
+                    <div class="flex items-center mb-2">
+                      <input type="checkbox" name="color" value="{{ color.id }}" id="color-{{ color.id }}"
+                        class="hidden" {% if color.id|stringformat:"s" in selected_colors %}checked{% endif %}>
+                      <label for="color-{{ color.id }}" class="cursor-pointer flex items-center">
+                        <span
+                          class="inline-block h-3 w-3 rounded-full border-1 {% if color.id|stringformat:"s" in selected_colors %}colorSelected{% else %}{% endif %}"
+                          style="background-color: {{ color.name }};"></span>
+                        <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ color.name }}</span>
+                      </label>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                  <button type="submit"
+                    class="rounded-lg bg_primary bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-700 dark:hover:bg-primary-800 dark:focus:ring-primary-800">Filter
+                  </button>
+                  <button type="reset" id="resetButton"
+                    class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">Reset
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <script>
+      document.getElementById('resetButton').addEventListener('click', function () {
+        // Clear all checkboxes
+        document.querySelectorAll('#filterModal input[type="checkbox"]').forEach(function (checkbox) {
+          checkbox.checked = false;
+        });
+
+        // Clear all select elements
+        document.querySelectorAll('#filterModal select').forEach(function (select) {
+          select.selectedIndex = 0;
+        });
+
+        // Reload the page without query parameters
+        window.location.href = window.location.pathname;
+      });
+
+      // Add event listeners to color labels to toggle the checkbox
+      document.querySelectorAll('#filterModal label[for^="color-"]').forEach(function (label) {
+        label.addEventListener('click', function (event) {
+          event.preventDefault();
+          const checkbox = document.getElementById(label.getAttribute('for'));
+          checkbox.checked = !checkbox.checked;
+          label.querySelector('span').classList.toggle('colorSelected');
+        });
+      });
+    </script>
+
+
+  </section>
+
+
+
 
 
 
   {% include '../components/mainfooter.html' %}
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.wishlist-btn').forEach(function (button) {
+        button.addEventListener('click', function () {
+          const productId = this.getAttribute('data-product-id');
+          const icon = this.querySelector('.heart');
+
+          fetch(`/user/wishlist/toggle/${productId}/`, {
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'added') {
+                icon.classList.add('filled');
+              } else if (data.status === 'removed') {
+                icon.classList.remove('filled');
+              }
+            });
+        });
+      });
+    });
+  </script>
 
 </body>
 

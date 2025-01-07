@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load last_seen %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +9,86 @@
   <title>Re - Wears | Homepage</title>
   <link rel="stylesheet" href="{%  static 'style/style.css' %}">
   <link rel="stylesheet" href="{%  static 'style/product.css' %}">
+  <style>
+    /* Modal styles */
+    .product_page .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
 
+    .product_page .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+    }
+
+    .product_page .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .product_page .close:hover,
+    .product_page .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .product_page .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .product_page .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .product_page .btn.cancel {
+      background-color: #ccc;
+    }
+
+    .product_page .btn.delete {
+      background-color: #d9534f;
+      color: white;
+    }
+
+    .details_div {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 768px) {
+
+      .more_items_grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+
+
+    }
+
+    @media screen and (max-width: 500px) {
+
+      .more_items_grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
 </head>
 
 <body class="grey_bg">
@@ -21,15 +100,14 @@
 
   <div class="product_page">
     <div class="category_det">
-      <a href="#">Home</a>
+      <a href="{% url 'homepage'  %}">Home</a>
       <span class="dash"></span>
-      <a href="#">{{ product.category.parent.parent.name }}</a>
+      <a
+        href="{% url 'category_products' product.category.parent.parent.id %}">{{ product.category.parent.parent.name }}</a>
       <span class="dash"></span>
-      <a href="#">{{ product.category.parent.name }}</a>
+      <a href="{% url 'category_products' product.category.parent.id %}">{{ product.category.parent.name }}</a>
       <span class="dash"></span>
-      <a href="#">{{ product.category.name }}</a>
-      <span class="dash"></span>
-      <a href="#" class="title">Stories Long dresses</a>
+      <a href="{% url 'category_products' product.category.id %}">{{ product.category.name }}</a>
     </div>
     <div class="product_div">
       <div class="product_images">
@@ -42,12 +120,28 @@
       </div>
       <div class="right">
         <div class="details_div">
+
           <div class="price">
             <h2>
-              AED {{ product.price }}
+              {{ product.title }}
             </h2>
+            <p style="color: #797979;margin-top: 10px;">
+              {{ product.description }}
+            </p>
+            <br><br>
+            <h3>
+              AED {{ product.price }}
+            </h3>
           </div>
           <table>
+            <tr>
+              <td class="name">
+                <strong>Seller</strong>
+              </td>
+              <td class="value brand">
+                <a href="{% url 'UserProfileView' product.user.id  %}">{{ product.user.username }}</a>
+              </td>
+            </tr>
             <tr>
               <td class="name">
                 Brand
@@ -88,7 +182,7 @@
                 Location
               </td>
               <td class="value">
-                Orlando, United States
+                {{ product.user.userprofile.location }}
               </td>
             </tr>
             <tr>
@@ -112,20 +206,61 @@
                 Uploaded
               </td>
               <td class="value">
-                4 minutes ago
+                {{ product.upload_time|date:"F j, Y" }}
               </td>
             </tr>
           </table>
           <div class="about">
-            <h3>
-              {{ product.title }}
-            </h3>
-            <p>
-              {{ product.description }}
-            </p>
+            <a href="{% url 'UserProfileView' product.user.id  %}" class="user_info_flex">
+              <div class="user_info">
+                <h3>
+                  {{ product.user.username }}
+                </h3>
+
+                <div class="reviews">
+                  <div class="star-rating">
+                    <div class="filled-stars" style="width: {{ product.user.userprofile|average_rating_percentage }}%">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                    </div>
+                    <div class="empty-stars">
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                      <i class="far fa-star"></i>
+                    </div>
+                  </div>
+                  <br>
+                  <p>{{ product.user.userprofile|reviews_count }} Reviews</p>
+                </div>
+              </div>
+
+
+              <div class="profile_pic">
+                {% if product.user.userprofile.photo %}
+                <img src="{{ product.user.userprofile.photo.url }}" id="userPhoto" alt="user photo">
+                {% else %}
+                <p>{{ product.user.first_name|default:product.user.username|slice:":1" }}</p>
+                {% endif %}
+              </div>
+            </a>
+            <br>
+            {% if product.user.userprofile.about %}
+
+            <p style="white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;">{{ product.user.userprofile.about }}</p>
+
+            {% else %}
+            <p>No description available</p>
+            {% endif %}
             {% if product.status != "active" and user != product.user %}
-            <br>
-            <br>
+
             <p>
               <strong>
                 Product is already {{ product.status }}
@@ -133,24 +268,19 @@
             </p>
 
             {% else %}
-            <div class="functions_btns">
+            <div class="functions_btns" style="margin-top: 30px;">
               <!-- <a href="" class="btn p_btn">Make an offer</a> -->
               {% if user == product.user  %}
               <a href="{% url 'product_update' product.id %}" class="btn p_btn">Edit Product</a>
 
-              <form method="post" action="{% url 'product_delete' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn dell_btn">Delete Product</button>
-              </form>
+              <button type="button" class="btn dell_btn" onclick="showDeleteModal()">Delete Product</button>
+
 
               {% else %}
 
-              <form method="post" action="{% url 'order_create' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn p_btn">Buy Now</button>
-              </form>
+              <a href="{% url 'order_confirmation' product.id %}" style="color: #fff;" class="btn p_btn">Buy Now</a>
               {% if chat %}
-              <a href="{% url 'chat_detail' chat.pk %}" class="outline_btn">Message Seller</a>
+              <a href="{% url 'chat_detail' chat.pk %}" class="outline_btn">Inbox</a>
               {% else %}
               <form method="post" action="{% url 'create_chat' object.id %}">
                 {% csrf_token %}
@@ -158,10 +288,16 @@
               </form>
               {% endif %}
 
-              <form method="post" action="{% url 'add_to_wishlist' product.id %}">
-                {% csrf_token %}
-                <button type="submit" class="outline_btn">Add to Wishlist</button>
-              </form>
+
+
+              {% if product.id in wishlist %}
+              <button class="outline_btn addtowishlistbtn added">Added to Wishlist</button>
+              {% else %}
+              <button class="outline_btn addtowishlistbtn">Add to Wishlist</button>
+              {% endif %}
+
+
+
               {% endif %}
             </div>
             {% endif %}
@@ -169,11 +305,131 @@
         </div>
       </div>
     </div>
+    <style>
+      .more-items {
+        margin-top: 30px;
+      }
+
+      .more-items h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .more_items_grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 1200px) {
+        .product-grid {
+          grid-template-columns: 1fr 1fr 1fr;
+          /* 3 columns for screens smaller than 1200px */
+        }
+      }
+
+      @media (max-width: 992px) {
+        .product-grid {
+          grid-template-columns: 1fr 1fr;
+          /* 2 columns for screens smaller than 992px */
+        }
+      }
+
+      @media (max-width: 768px) {
+        .product-grid {
+          grid-template-columns: 1fr;
+          /* 1 column for screens smaller than 768px */
+        }
+      }
+
+      .more_items_grid div {
+        flex: 1 1 calc(25% - 20px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s;
+      }
+
+      .more_items_grid div:hover {
+        transform: translateY(-5px);
+      }
+
+      .more_items_grid img {
+        width: 100%;
+        height: 250px;
+        display: block;
+        object-position: top;
+        object-fit: cover;
+      }
+
+      .more_items_grid p {
+        margin: 10px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .more_items_grid p:last-child {
+        font-weight: bold;
+        color: #000;
+      }
+    </style>
+    {% if more_items %}
+    <div class="more-items">
+      <h3>More items from this seller</h3>
+      <div class="more_items_grid">
+        {% for item in more_items %}
+        <div>
+          <a href="{% url 'product-detail' item.id %}">
+            <img src="{{ item.images.first.image.url }}" alt="{{ item.title }}">
+            <p>{{ item.title }}</p>
+            <p>{{ item.price }}</p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeDeleteModal()">&times;</span>
+        <h2>Confirm Deletion</h2>
+        <br>
+        <p>This action cannot be undone and you will lose all data associated with this product.</p>
+        <p>Are you sure you want to delete this product?</p>
+        <br>
+        <div class="modal-footer">
+          <button class="btn cancel" onclick="closeDeleteModal()">Cancel</button>
+          <form method="post" action="{% url 'product_delete' product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn delete">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
+
+
 
   {% include '../components/mainfooter.html' %}
 
   <script>
+    function showDeleteModal() {
+      document.getElementById("deleteModal").style.display = "block";
+    }
+
+    function closeDeleteModal() {
+      document.getElementById("deleteModal").style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById("deleteModal");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
     document.addEventListener("DOMContentLoaded", function () {
       const deleteModal = document.getElementById("deleteModal");
       const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
@@ -191,7 +447,31 @@
       img.addEventListener("click", () => {
         document.querySelector(".big_image").src = img.src;
       })
-    })
+    });
+
+
+    if (document.querySelector('.addtowishlistbtn')) {
+      const addtoWishListBtn = document.querySelector('.addtowishlistbtn');
+      addtoWishListBtn.addEventListener('click', function () {
+        fetch(`/user/wishlist/toggle/{{product.id}}/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'added') {
+              addtoWishListBtn.innerText = "Added to Wishlist";
+              addtoWishListBtn.classList.add('added');
+            } else if (data.status === 'removed') {
+              addtoWishListBtn.innerText = 'Add to Wishlist';
+              addtoWishListBtn.classList.remove('added');
+            }
+          });
+      });
+    }
   </script>
 </body>
 

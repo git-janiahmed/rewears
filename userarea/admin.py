@@ -7,6 +7,7 @@ from .models import Category, Product, ProductImage, Brand, Size, Color
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "parent", "grandparent")
+    list_filter = ("parent",)
 
     def grandparent(self, obj):
         if obj.parent and obj.parent.parent:

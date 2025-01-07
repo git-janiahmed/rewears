@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation | Re - Wears</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style/product.css' %}">
+</head>
+
+<body class="grey_bg">
+  {% include '../components/mainheader.html' %}
+
+  <div class="confirmation_page">
+    <div class="inner">
+      <div class="order_info">
+        <div class="order_head">
+
+          <p class="light">
+            Order
+          </p>
+          <a href="{% url 'product-detail' product.id %}" class="btn cancel_btn">Cancel</a>
+        </div>
+        <div class="product_div">
+          <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}">
+
+          <div class="right">
+            <div class="txt">
+              <h3>{{ product.title }}</h3>
+              <p>{{ product.description }}</p>
+            </div>
+
+            <p><strong>AED {{ product.price }} </strong> </p>
+
+          </div>
+
+        </div>
+
+        <p>
+          This item will be reserved for you for 24 hours.
+        </p>
+      </div>
+      <div class="order_summary">
+        <p class="light">
+          Order Summary
+        </p>
+        <div class="summary">
+          <div class="left">
+            <p class="strong">Price</p>
+            <p class="strong">Seller</p>
+
+          </div>
+          <div class="right">
+            <p>AED {{ product.price }}</p>
+            <p> {{ product.user }}</p>
+
+          </div>
+
+        </div>
+
+        <div class="buy_btn">
+          <form method="post" action="{% url 'order_create' product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn p_btn">BUY NOW</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+    <h1>Order Confirmation</h1>
+    <p>Are you sure you want to buy the following product?</p>
+    <div class="product_details">
+      <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}">
+      <h2>{{ product.title }}</h2>
+      <p>{{ product.description }}</p>
+      <p><strong>Price:</strong> AED {{ product.price }}</p>
+    </div>
+    <form method="post" action="{% url 'order_create' product.id %}">
+      {% csrf_token %}
+      <button type="submit" class="btn p_btn">Confirm Purchase</button>
+    </form> -->
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+</body>
+
+</html>

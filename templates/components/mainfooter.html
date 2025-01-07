@@ -51,15 +51,17 @@
           </h3>
           <div class="footer_links">
             <a href="{% url 'helpcenter' %}"> Help center </a>
-            <a href="#"> Contact us </a>
+            <a href="{% url 'contact' %}"> Contact us </a>
+            <a href="{% url 'updates' %}"> Updates & Fixes </a>
+
           </div>
         </div>
       </div>
     </div>
-    <div class="footer_bottom">
+    <div class=" footer_bottom">
       <div class="footer_links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
+        <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+        <a href="{% url 'terms_and_conditions' %}">Terms & Conditions</a>
       </div>
     </div>
   </div>

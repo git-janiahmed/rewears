@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Re - Wears | Homepage</title>
+  <link rel="stylesheet" href="{%  static 'style/style.css' %}">
+  <link rel="stylesheet" href="{%  static 'style/user.css' %}">
+
+  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+</head>
+
+<body class="user">
+  {% include '../components/mainheader.html' %}
+
+
+  <div class="bg_light">
+    <div class="settings_dashboard">
+      <div class="settings_menu">
+        <h3>
+          Settings
+        </h3>
+        <div class="settings_links">
+          <a href="{% url 'userprofile' %}" class="active">Profile details</a>
+          <a href="{% url 'usersettings' %}">Account settings</a>
+          <a href="{% url 'notification_list' %}">Notifications</a>
+        </div>
+      </div>
+      <div class="settings_content">
+        <form method="post" enctype="multipart/form-data" class="profile_details">
+          {% csrf_token %}
+
+          <div class="inner">
+            <div class="det">
+              <div class="photo">
+                <p>
+                  <strong>
+                    Your photo
+                  </strong>
+                </p>
+                <div class="photo_upload">
+                  {% if user.userprofile.photo %}
+                  <img src="{{ user.userprofile.photo.url }}" id="userPhoto" alt="user photo">
+                  {% else %}
+                  <img src="{% static 'user_images/default.jpg' %}" id="userPhoto" alt="default photo">
+                  {% endif %}
+
+                  <!-- Hide the file input -->
+                  <input type="file" id="photoInput" name="photo" style="display: none;">
+                  <button type="button" id="changePhotoButton" class="outline_btn">Change Photo</button>
+                  <script>
+                    document.getElementById('changePhotoButton').addEventListener('click', function () {
+                      document.getElementById('photoInput').click();
+                    });
+
+                    document.getElementById('photoInput').addEventListener('change', function (event) {
+                      const file = event.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                          document.getElementById('userPhoto').src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    });
+                  </script>
+                </div>
+              </div>
+              <div class="abt">
+                <p>
+                  <strong>
+                    Describe about yourself
+                  </strong>
+                </p>
+
+                <textarea name="about" id="id_about">{{ form.about.value }}</textarea>
+              </div>
+            </div>
+            <div class="location">
+              <p>
+                <strong>
+                  Location
+                </strong>
+              </p>
+              <div class="location_input">
+                <input type="text" name="location" value="{{ form.location.value }}" placeholder="Enter your location">
+              </div>
+            </div>
+
+            <div class="rt_txt">
+              <div class="rt_btn">
+                <button class="btn p_btn" type="submit">Update Profile</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+  {% include '../components/mainfooter.html' %}
+
+</body>
+
+</html>

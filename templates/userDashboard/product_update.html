@@ -6,17 +6,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{%  static 'style/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'style/fonts.css' %}">
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <title>Update Product | Re - Wears</title>
+  <link rel="stylesheet" href="{% static 'style/style.css' %}">
+  <link rel="stylesheet" href="{% static 'style/product.css' %}">
+
 </head>
 
 <body>
-  <h1 class="text-3xl font-bold underline">
-    Product images
-  </h1>
+  {% include '../components/mainheader.html' %}
+
   <!-- Card Section -->
   <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+
+    <h1 class="text-3xl font-bold underline text-center">
+      Update Product
+    </h1>
+    <br><br>
+
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
 
@@ -45,7 +54,7 @@
 
               <label for="images"
                 class="group p-4 sm:p-7 block cursor-pointer text-center border-2 border-dashed border-gray-200 rounded-lg focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2">
-                <input id="images" name="images" type="file" class="sr-only" multiple>
+                <input id="images" name="images" type="file" class="sr-only" multiple onchange="previewImages(event)">
                 <svg class="size-10 mx-auto text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                   fill="currentColor" viewBox="0 0 16 16">
                   <path fill-rule="evenodd"
@@ -61,6 +70,9 @@
                 </span>
               </label>
             </div>
+
+            <!-- Image Preview -->
+            <div id="image-preview-container" class="flex gap-4 flex-wrap"></div>
 
             <!-- Title -->
             <div class="space-y-2">
@@ -83,10 +95,6 @@
                 placeholder="A detailed summary will better explain your products to the audience.">{{ product.description }}</textarea>
             </div>
 
-
-
-
-
             <!-- Condition -->
             <div class="space-y-2">
               <label for="condition" class="inline-block text-sm font-medium text-gray-800 mt-2.5">
@@ -98,11 +106,6 @@
                 <option value="used" {% if product.condition == 'used' %}selected{% endif %}>Used</option>
               </select>
             </div>
-
-            <!-- Colors -->
-
-
-
 
             <!-- Material -->
             <div class="space-y-2">
@@ -155,23 +158,13 @@
 
   </div>
 
-
-
-
-
-
-
-
-  <script src="
-    https://cdn.jsdelivr.net/npm/preline@2.3.0/dist/preline.min.js
-    "></script>
+  <script src="https://cdn.jsdelivr.net/npm/preline@2.3.0/dist/preline.min.js"></script>
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-
             'primary': '#9D977A',
             'primary': {
               50: '#9D977A',
@@ -244,7 +237,40 @@
           });
         });
     }
+
+    function previewImages(event) {
+      const files = event.target.files;
+      const previewContainer = document.getElementById('image-preview-container');
+      previewContainer.innerHTML = '';
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const previewDiv = document.createElement('div');
+          previewDiv.classList.add('relative', 'w-20', 'h-20', 'mr-2', 'mb-2');
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.classList.add('w-full', 'h-full', 'object-cover', 'rounded');
+
+          const removeBtn = document.createElement('span');
+          removeBtn.innerHTML = '&times;';
+          removeBtn.classList.add('absolute', 'top-0', 'right-0', 'bg-red-500', 'text-white', 'rounded-full',
+            'cursor-pointer', 'px-1', 'text-xs');
+          removeBtn.onclick = function () {
+            previewDiv.remove();
+          };
+
+          previewDiv.appendChild(img);
+          previewDiv.appendChild(removeBtn);
+          previewContainer.appendChild(previewDiv);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
   </script>
+
+  {% include '../components/mainfooter.html' %}
 
 </body>
 
