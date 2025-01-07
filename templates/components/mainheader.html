@@ -1,4 +1,7 @@
 {% load static %}
+
+
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
@@ -774,6 +777,14 @@
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
+  const head = document.querySelector("head");
+
+  head.innerHTML += `<link rel="icon" type="image/png" href="/static/favicon/android-chrome-192x192" sizes="192x192" />
+<link rel="shortcut icon" href="/static/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/static/favicon/site.webmanifest" />`;
+
+
   document.addEventListener('DOMContentLoaded', () => {
     const notificationBells = document.querySelectorAll('.notification-bell');
     const notificationDropdowns = document.querySelectorAll('.notification-dropdown');
